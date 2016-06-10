@@ -1,4 +1,4 @@
-from voting_system import OrdinalSystem, OrdinalVote, VotingException
+from .voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
 from itertools import combinations
 
 

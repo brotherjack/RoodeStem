@@ -10,7 +10,7 @@ def flatten(l):
         (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]
 
 
-class VotingSystem(metaclass=ABCMeta):
+class VotingSystem(object, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, choices):
         pass
@@ -25,26 +25,23 @@ class VotingSystem(metaclass=ABCMeta):
     def is_ordinal(self):
         pass
 
-    @is_ordinal.setter    
-    def is_ordinal(self, value):
-        msg = "{0} does not support changing 'is_ordinal' property."
-        raise TypeError(msg.format(self.__class__))
 
     @abstractmethod
     def decide(self, votes):
         pass
 
-class OrdinalSystem(VotingSystem):
-    def __init__(self):
-        self._is_ordinal = True
 
+class OrdinalSystem(VotingSystem):
     @property
     def is_ordinal(self):
-        return self._is_ordinal
+        return True
 
+    
 class CardinalSystem(VotingSystem):
-    def __init__(self):
-        self._is_ordinal = False
+    @property
+    def is_ordinal(self):
+        return False
+
 
 class Vote(metaclass=ABCMeta):
     def __init__(self, choices):
