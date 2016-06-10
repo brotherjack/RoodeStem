@@ -19,3 +19,13 @@ class TestOrdinal:
     def test_ordinal_system_is_abstract(self):
         with pytest.raises(TypeError):
             ordsys = OrdinalSystem()
+
+    def test_condercet_paradox(self):
+        with pytest.raises(CondorcetParadox):
+            cm = CondorcetMethod(['a', 'b', 'c'])
+            votes = [
+                OrdinalVote(['a','b','c']),
+                OrdinalVote(['b','c','a']),
+                OrdinalVote(['c','a','b'])
+            ]
+            cm.decide(votes)
