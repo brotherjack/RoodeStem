@@ -57,6 +57,7 @@ class CondorcetMethod(OrdinalSystem):
         results = {}
         for k in self._order_matrix.keys():
             results[k] = sum(self._order_matrix[k].values()) 
+        self._check_for_condercet_paradox()
         return results
 
     def _run_comparisons(self, votes, verbose):
@@ -119,25 +120,7 @@ class CondorcetMethod(OrdinalSystem):
                 else:
                     beento.append(goto)
                     return [follow_path(p, beento) for p in paths]
-        try:
-            return follow_path(fk, [])
-        except CondorcetParadox as cp:
-            print(cp.msg)
+        return follow_path(fk, [])
 
     def __repr__(self):
         return "<CondorcetMethod: choices={0}>".format(self.choices)
-
-if __name__ == '__main__':
-    a = 'a'
-    b = 'b'
-    c = 'c'
-    d = 'd'
-    e = 'e'
-
-    import random
-    choices = [a,b,c,d,e]
-    cm = CondorcetMethod(choices)
-    votes = [OrdinalVote(random.sample(choices, 5)) for i in range(0, 10)]
-    print(cm.decide(votes))
-
-
