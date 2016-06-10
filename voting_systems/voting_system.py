@@ -69,4 +69,5 @@ class OrdinalVote(Vote):
     def ranking(self, choice):
         return self.choices.index(choice)
 
-
+    def __repr__(self):
+        return "<OrdinalVote: {0}>".format(self._choices)
