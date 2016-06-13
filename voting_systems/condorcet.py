@@ -2,19 +2,16 @@ try:
     from .voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
 except SystemError:
     from voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
+
 from itertools import combinations
+
+from utils import safe_list_append
 
 
 class Result:
-    def __init__(self, *order):
-        if len(order) > 1:
-            self._winner = order[0]
-            self._loser = order[1]
-            self._tied = None
-        else:
-            self._winner = None
-            self._loser = None
-            self._tied = order[0]
+    def __init__(self, **order):
+        for cond in ['winner', 'loser', 'tied']:
+            setattr(self, cond, order.get(cond, []))
     
     @property  
     def winner(self):
@@ -27,6 +24,29 @@ class Result:
     @property  
     def tied(self):
         return self._tied
+    
+    
+    @winner.setter  
+    def winner(self, value):
+        self._winner = value
+
+    @loser.setter  
+    def loser(self, value):
+        self._loser = value
+
+    @tied.setter  
+    def tied(self, value):
+        self._tied  = value
+    
+    @classmethod
+    def ord_items(cls, x, y):
+        if x[1] > y[1]:
+            return (cls(winner=x[0],loser=y[0]), x[1])
+        elif x[1] < y[1]:
+            return (cls(winner=y[0], loser=x[0]), y[1])
+        else:
+            return (cls(winner=[x[0], y[0]]), x[1])
+    
     def __repr__(self):
         if self._tied:
             return "<Result(tied={0})>".format(self._tied)
@@ -60,9 +80,22 @@ class CondorcetMethod(OrdinalSystem):
         for k in self._order_matrix.keys():
             results[k] = sum(self._order_matrix[k].values()) 
         self._check_for_condercet_paradox()
-        return results
+        return self._return_results(results)
 
-    #def _return_results(self, results):
+    def _return_results(self, results):
+        desclist = sorted(results.items(), key=lambda x: x[1], reverse=True)
+        res, bar = Result.ord_items(desclist[0], desclist[1])
+        for itm in desclist[2:]:
+            if itm[1] > bar:
+                res.loser = safe_list_append(res.winner, res.loser)
+                res.winner = itm[0]
+                bar = itm[1]
+            elif itm[1] < bar:
+                res.loser = safe_list_append(itm[0], res.loser)
+            else:
+                res.winner = safe_list_append(res.winner, itm[0])
+        return res
+        
 
     def _run_comparisons(self, votes, verbose):
         round_scores = {}
@@ -91,11 +124,11 @@ class CondorcetMethod(OrdinalSystem):
                 print(msg.format(contest, c1, round_scores[contest][c1],
                                  c2, round_scores[contest][c2]))
             if round_scores[contest][c1] < round_scores[contest][c2]:
-                ordering.append(Result(c2, c1))
+                ordering.append(Result(winner=c2, loser=c1))
             elif round_scores[contest][c2] < round_scores[contest][c1]:
-                ordering.append(Result(c1, c2))
+                ordering.append(Result(winner=c1, loser=c2))
             else:
-                ordering.append(Result([c1,c2]))
+                ordering.append(Result(tied=[c1,c2]))
         return ordering  
 
     def _make_order_matrix(self, orders):

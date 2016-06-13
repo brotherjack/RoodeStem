@@ -27,7 +27,8 @@ if __name__ == '__main__':
         print("vote[{0}]: {1}".format(i,vote))
 
     try:
-        print(cm.decide(votes))
+        results = cm.decide(votes)
+        print("results are: {0}".format(results))
     except CondorcetParadox as cp:
         print(cp.msg)
     
