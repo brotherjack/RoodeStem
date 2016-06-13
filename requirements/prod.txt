@@ -1,1 +1,2 @@
 # Everything needed in production
+IPython>=4.2.0

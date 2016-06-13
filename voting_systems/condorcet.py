@@ -1,4 +1,7 @@
-from .voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
+try:
+    from .voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
+except SystemError:
+    from voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
 from itertools import combinations
 
 
@@ -24,7 +27,6 @@ class Result:
     @property  
     def tied(self):
         return self._tied
-
     def __repr__(self):
         if self._tied:
             return "<Result(tied={0})>".format(self._tied)
@@ -59,6 +61,8 @@ class CondorcetMethod(OrdinalSystem):
             results[k] = sum(self._order_matrix[k].values()) 
         self._check_for_condercet_paradox()
         return results
+
+    #def _return_results(self, results):
 
     def _run_comparisons(self, votes, verbose):
         round_scores = {}
