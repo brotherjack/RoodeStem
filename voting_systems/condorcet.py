@@ -1,58 +1,23 @@
 try:
-    from .voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
+    from .voting_system import (
+        OrdinalSystem, 
+        VotingSystem, 
+        OrdinalVote, 
+        VotingException,
+        Result
+    )
 except SystemError:
-    from voting_system import OrdinalSystem, VotingSystem, OrdinalVote, VotingException
+    from voting_system import (
+        OrdinalSystem, 
+        VotingSystem, 
+        OrdinalVote, 
+        VotingException,
+        Result
+    )
 
 from itertools import combinations
 
 from utils import safe_list_append
-
-
-class Result:
-    def __init__(self, **order):
-        for cond in ['winner', 'loser', 'tied']:
-            setattr(self, cond, order.get(cond, []))
-    
-    @property  
-    def winner(self):
-        return self._winner
-
-    @property  
-    def loser(self):
-        return self._loser
-
-    @property  
-    def tied(self):
-        return self._tied
-    
-    
-    @winner.setter  
-    def winner(self, value):
-        self._winner = value
-
-    @loser.setter  
-    def loser(self, value):
-        self._loser = value
-
-    @tied.setter  
-    def tied(self, value):
-        self._tied  = value
-    
-    @classmethod
-    def ord_items(cls, x, y):
-        if x[1] > y[1]:
-            return (cls(winner=x[0],loser=y[0]), x[1])
-        elif x[1] < y[1]:
-            return (cls(winner=y[0], loser=x[0]), y[1])
-        else:
-            return (cls(winner=[x[0], y[0]]), x[1])
-    
-    def __repr__(self):
-        if self._tied:
-            return "<Result(tied={0})>".format(self._tied)
-        else:
-            return "<Result(winner={0}, loser={1})>".format(self._winner,
-                                                            self._loser)
        
 
 class CondorcetParadox(VotingException):
