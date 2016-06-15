@@ -11,7 +11,7 @@ sys.path.insert(0, myPath + '/../')
 print(os.listdir(myPath + '/../'))
 
 from voting_systems.voting_system import OrdinalSystem, OrdinalVote
-from voting_systems.condorcet import CondorcetMethod, CondorcetParadox, Result
+from voting_systems.condorcet import CondorcetMethod, CondorcetParadox
 
 
 class TestOrdinal:
