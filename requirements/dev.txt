@@ -3,3 +3,6 @@
 
 # Testing
 pytest>=2.6.3
+
+# Documentation
+sphinx>=1.4.4
