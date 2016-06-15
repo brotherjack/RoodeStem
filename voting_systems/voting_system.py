@@ -2,20 +2,17 @@
 from abc import abstractmethod, ABCMeta
 from itertools import combinations
 
-from utils import flatten
+from utils import flatten, listize, safe_list_append
+
 
 class VotingException(Exception): pass
 class VotingError(Exception): pass
 
 
-def flatten(l): 
-    return flatten(l[0]) +\
-        (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]
-
-
 class Result:
+    _condtypes = ['winner', 'loser', 'tied']
     def __init__(self, **order):
-        for cond in ['winner', 'loser', 'tied']:
+        for cond in Result._condtypes:
             setattr(self, cond, order.get(cond, []))
     
     @property  
@@ -52,6 +49,16 @@ class Result:
         else:
             return (cls(winner=[x[0], y[0]]), x[1])
     
+    @staticmethod
+    def _cmp_type(r, ty):
+        return set(listize(getattr(r, ty)))
+    
+    def __eq__(self, other):
+        for ty in Result._condtypes:
+            if not Result._cmp_type(self, ty) == Result._cmp_type(other, ty):
+                return False
+        return True          
+    
     def __repr__(self):
         if self._tied:
             return "<Result(tied={0})>".format(self._tied)
@@ -80,6 +87,19 @@ class VotingSystem(object, metaclass=ABCMeta):
     def decide(self, votes):
         pass
 
+    def _return_results(self, results):
+        desclist = sorted(results.items(), key=lambda x: x[1], reverse=True)
+        res, bar = Result.ord_items(desclist[0], desclist[1])
+        for itm in desclist[2:]:
+            if itm[1] > bar:
+                res.loser = safe_list_append(res.winner, res.loser)
+                res.winner = itm[0]
+                bar = itm[1]
+            elif itm[1] < bar:
+                res.loser = safe_list_append(itm[0], res.loser)
+            else:
+                res.winner = safe_list_append(res.winner, itm[0])
+        return res
 
 class OrdinalSystem(VotingSystem):
     @property
@@ -118,6 +138,12 @@ class OrdinalVote(Vote):
 
     def ranking(self, choice):
         return self.choices.index(choice)
+
+    def __iter__(self):
+        return iter(self._choices)
+    
+    def __len__(self):
+        return len(self._choices)
 
     def __repr__(self):
         return "<OrdinalVote: {0}>".format(self._choices)

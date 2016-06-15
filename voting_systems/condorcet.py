@@ -16,8 +16,6 @@ except SystemError:
     )
 
 from itertools import combinations
-
-from utils import safe_list_append
        
 
 class CondorcetParadox(VotingException):
@@ -46,21 +44,6 @@ class CondorcetMethod(OrdinalSystem):
             results[k] = sum(self._order_matrix[k].values()) 
         self._check_for_condercet_paradox()
         return self._return_results(results)
-
-    def _return_results(self, results):
-        desclist = sorted(results.items(), key=lambda x: x[1], reverse=True)
-        res, bar = Result.ord_items(desclist[0], desclist[1])
-        for itm in desclist[2:]:
-            if itm[1] > bar:
-                res.loser = safe_list_append(res.winner, res.loser)
-                res.winner = itm[0]
-                bar = itm[1]
-            elif itm[1] < bar:
-                res.loser = safe_list_append(itm[0], res.loser)
-            else:
-                res.winner = safe_list_append(res.winner, itm[0])
-        return res
-        
 
     def _run_comparisons(self, votes, verbose):
         round_scores = {}
