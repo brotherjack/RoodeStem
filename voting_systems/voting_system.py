@@ -121,3 +121,10 @@ class OrdinalVote(Vote):
 
     def __repr__(self):
         return "<OrdinalVote: {0}>".format(self._choices)
+
+class CardinalVote(Vote):
+    @property    
+    def choices(self):
+        return self._choices
+
+        
