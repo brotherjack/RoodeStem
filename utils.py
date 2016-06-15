@@ -15,3 +15,7 @@ def safe_list_append(x,y):
             return [x] + y 
         else:
             return [x] + [y]
+
+def flatten(l): 
+    return flatten(l[0]) +\
+        (flatten(l[1:]) if len(l) > 1 else []) if type(l) is list else [l]

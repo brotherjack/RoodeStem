@@ -2,6 +2,8 @@
 from abc import abstractmethod, ABCMeta
 from itertools import combinations
 
+from utils import flatten
+
 class VotingException(Exception): pass
 class VotingError(Exception): pass
 
