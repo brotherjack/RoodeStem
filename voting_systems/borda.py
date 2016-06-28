@@ -23,7 +23,7 @@ except SystemError:
 class BordaCount(CardinalSystem):
     @staticmethod
     def standard_score_function(vote):
-        for i in range(0 , len(vote)):
+        for i in range(1, len(vote)):
             yield  len(vote) - i
 
     def __init__(self, choices, score_fn=None):
