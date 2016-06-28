@@ -26,7 +26,7 @@ class CondorcetParadox(VotingException):
 
 class CondorcetMethod(OrdinalSystem):
     def __init__(self, choices):
-        super()
+        super().__init__(choices)
         self._choices = choices
         self._order_matrix = {k1:\
             {k2:None if k2 != k1 else 0 for k2 in choices} for k1 in choices}

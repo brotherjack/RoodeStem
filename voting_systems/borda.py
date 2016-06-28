@@ -27,6 +27,7 @@ class BordaCount(CardinalSystem):
             yield  len(vote) - i
 
     def __init__(self, choices, score_fn=None):
+        super().__init__(choices)
         self._choices = choices
         self.scores = {k:0 for k in self.choices}
         if not score_fn:
