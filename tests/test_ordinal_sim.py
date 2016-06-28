@@ -5,13 +5,17 @@ Created on Jun 10, 2016
 '''
 import pytest
 
-import sys, os
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../')
-print(os.listdir(myPath + '/../'))
+from conftest import hook_into_path
 
-from voting_systems.voting_system import OrdinalSystem, OrdinalVote
+hook_into_path()
+
+from voting_systems.voting_system import (
+    OrdinalSystem, 
+    OrdinalVote, 
+    VotingError,
+)
 from voting_systems.condorcet import CondorcetMethod, CondorcetParadox
+
 
 
 class TestOrdinal:
@@ -29,3 +33,8 @@ class TestOrdinal:
                 OrdinalVote(['c','a','b'])
             ]
             cm.decide(votes)
+    
+    def test_respond_correctly_to_one_choice(self):
+        with pytest.raises(VotingError):
+            cm = CondorcetMethod(['a'])
+        
