@@ -26,8 +26,7 @@ class Result:
     @property  
     def tied(self):
         return self._tied
-    
-    
+       
     @winner.setter  
     def winner(self, value):
         self._winner = value
@@ -68,9 +67,9 @@ class Result:
 
 
 class VotingSystem(object, metaclass=ABCMeta):
-    @abstractmethod
     def __init__(self, choices):
-        pass
+        if len(choices) < 2:
+            raise VotingError("A voting system requires two or more choices.")
 
     @property
     @abstractmethod #TODO: Note explaining why not abstractmethod > property as blog post
@@ -102,12 +101,18 @@ class VotingSystem(object, metaclass=ABCMeta):
         return res
 
 class OrdinalSystem(VotingSystem):
+    def __init__(self, choices):
+        super().__init__(choices)
+
     @property
     def is_ordinal(self):
         return True
 
     
 class CardinalSystem(VotingSystem):
+    def __init__(self, choices):
+        super().__init__(choices)
+
     @property
     def is_ordinal(self):
         return False
