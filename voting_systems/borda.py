@@ -26,12 +26,19 @@ class BordaCount(CardinalSystem):
         for i in range(1, len(vote)):
             yield  len(vote) - i
 
+    @staticmethod
+    def fractional_score_function(vote):
+        for i in range(1, len(vote)+1):
+            yield 1 / i
+
     def __init__(self, choices, score_fn=None):
         super().__init__(choices)
         self._choices = choices
         self.scores = {k:0 for k in self.choices}
         if not score_fn:
-            self.score_fn = BordaCount.standard_score_function 
+            self.score_fn = BordaCount.standard_score_function
+        else:
+            self.score_fn = score_fn
 
     @property
     def choices(self):
