@@ -13,4 +13,7 @@ class TestResult:
     def test_null_result_not_tolerated(self):
         with pytest.raises(TypeError):
             Result()
-            
+    
+    def test_passed_multiple_winners(self):
+        res = Result(winner=['a', 'b', 'c'], tied=['b','c'])
+        assert res == Result(tied=['a', 'b', 'c'])
