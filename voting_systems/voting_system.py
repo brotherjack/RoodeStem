@@ -98,9 +98,15 @@ class Result:
         if type(self.winner) is list:
             if type(self.tied) is list:
                 self._tied = list(self._tied)
-            for winner in self.winner:
-                if winner not in self.tied:
-                    self._tied.append(winner)
+            
+            if len(self.winner) > 0:
+                for winner in self.winner:
+                    if winner not in self.tied:
+                        self._tied.append(winner)
+            else:
+                for loser in self.loser:
+                    if loser not in self.tied:
+                        self._tied.append(loser)
             self._winner = []
              
     
