@@ -10,10 +10,31 @@ class VotingError(Exception): pass
 
 
 class Result:
+    """The outcome of a round of voting, with winners, losers, and ties.
+    
+    An immutable object which contains the outcome of a single round of voting.
+    Values passed to the Result constructor may be changed if not logically
+    consistent. See :func:`Result._resolve_incorrect_states_on_init` for more
+    details.
+
+    Args: 
+        winner (:obj:`str`, optional): A single winner labeled with a string.
+        tied (:obj:`list` of :obj:`str`, optional): In the case of multiple 
+            winners, this parameter contains the label of all tied candidate 
+            options.
+        loser (:obj:`list` of :obj:`str`, optional): All candidate options that
+            did not win in a round of voting.
+
+    Raises:
+        :py:exc:`TypeError`: If all potential outcomes are blank.
+    """
     _condtypes = ['winner', 'loser', 'tied']
     def __init__(self, **order):
         for cond in Result._condtypes:
-            setattr(self, cond, order.get(cond, []))
+            setattr(self, '_'+cond, order.get(cond, []))
+        
+        # Check and correct conditions states, if possible
+        self._resolve_incorrect_states_on_init()
     
     @property  
     def winner(self):
@@ -26,31 +47,62 @@ class Result:
     @property  
     def tied(self):
         return self._tied
-       
-    @winner.setter  
-    def winner(self, value):
-        self._winner = value
-
-    @loser.setter  
-    def loser(self, value):
-        self._loser = value
-
-    @tied.setter  
-    def tied(self, value):
-        self._tied  = value
     
     @classmethod
     def ord_items(cls, x, y):
+        """Creates new :class:`Result` from vote counts between two candidates.
+        
+        Attributes:
+            x (:obj:`tuple` of :obj:`str`, :obj:`int`): First entry is 
+                candidate label and the second is number of votes for said 
+                candidate.
+            y (:obj:`tuple` of :obj:`str`, :obj:`int`): First entry is 
+                candidate label and the second is number of votes for said 
+                candidate.
+        
+        Returns:
+            :class:`Result` with correct outcome between the two candidates.
+        """
         if x[1] > y[1]:
             return (cls(winner=x[0],loser=y[0]), x[1])
         elif x[1] < y[1]:
             return (cls(winner=y[0], loser=x[0]), y[1])
         else:
-            return (cls(winner=[x[0], y[0]]), x[1])
+            return (cls(tied=[x[0], y[0]]), x[1])
     
     @staticmethod
     def _cmp_type(r, ty):
         return set(listize(getattr(r, ty)))
+    
+    def _resolve_incorrect_states_on_init(self):
+        """Checks for, and resolves incongruent condition states, if possible
+        
+        If winner and tied conditions are blank, and loser is not, loser
+        entries are moved to tied and loser made blank (while it's possible to
+        see such a condition as all candidates tied for winning or losing, the
+        developers of the project would prefer a consistent outcome).
+        
+        If the user has passed a list of winners to the Result constructor, the
+        winner entries are moved to tied (if not already present there). The
+        winner field is then blanked, 
+        
+        Raises:
+            :py:exc:`TypeError`: If all potential outcomes are blank.
+        """
+        if (self.winner == []) and (self.tied == []):
+            if self.loser == []:
+                raise TypeError("Null result object is not permissible.")
+            self._tied = self._loser
+            return
+        
+        if type(self.winner) is list:
+            if type(self.tied) is list:
+                self._tied = list(self._tied)
+            for winner in self.winner:
+                if winner not in self.tied:
+                    self._tied.append(winner)
+            self._winner = []
+             
     
     def __eq__(self, other):
         for ty in Result._condtypes:
@@ -89,15 +141,17 @@ class VotingSystem(object, metaclass=ABCMeta):
     def _return_results(self, results):
         desclist = sorted(results.items(), key=lambda x: x[1], reverse=True)
         res, bar = Result.ord_items(desclist[0], desclist[1])
+        winner, loser = (res.winner, res.loser)
         for itm in desclist[2:]:
             if itm[1] > bar:
-                res.loser = safe_list_append(res.winner, res.loser)
-                res.winner = itm[0]
+                loser = safe_list_append(res.winner, res.loser)
+                winner = itm[0]
                 bar = itm[1]
             elif itm[1] < bar:
-                res.loser = safe_list_append(itm[0], res.loser)
+                loser = safe_list_append(itm[0], res.loser)
             else:
-                res.winner = safe_list_append(res.winner, itm[0])
+                winner = safe_list_append(res.winner, itm[0])
+        res = Result(winner=winner, loser=loser)
         return res
 
 class OrdinalSystem(VotingSystem):
