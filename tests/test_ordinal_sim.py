@@ -4,18 +4,13 @@ Created on Jun 10, 2016
 @author: Thomas Adriaan Hellinger
 '''
 import pytest
-
-from conftest import hook_into_path
-
-hook_into_path()
-
+    
 from voting_systems.voting_system import (
     OrdinalSystem, 
     OrdinalVote, 
     VotingError,
 )
 from voting_systems.condorcet import CondorcetMethod, CondorcetParadox
-
 
 
 class TestOrdinal:

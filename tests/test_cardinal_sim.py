@@ -5,10 +5,6 @@ Created on Jun 15, 2016
 '''
 import pytest
 
-from conftest import hook_into_path
-
-hook_into_path()
-
 from voting_systems.voting_system import(
     CardinalSystem, 
     OrdinalVote, 
@@ -34,3 +30,10 @@ class TestCardinal:
     def test_respond_correctly_to_one_choice(self):
         with pytest.raises(VotingError):
             bc = BordaCount(['a'])
+    
+    def test_fractional_scoring_function(self):
+        bc = BordaCount(['a', 'b', 'c'], BordaCount.fractional_score_function)
+        bc.decide([OrdinalVote(['a', 'b', 'c'])])
+        print(bc.scores)
+        assert bc.scores['a'] == 1 and bc.scores['b'] == 0.5 and (
+            bc.scores['c'] > 0.32 and  bc.scores['c'] < 0.34) 
