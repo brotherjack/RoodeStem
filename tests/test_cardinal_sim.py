@@ -21,7 +21,7 @@ class TestCardinal:
             cardsys = CardinalSystem()
     
     def test_borda_count(self):
-        votes = [OrdinalVote(['a', 'b', 'c']), OrdinalVote(['a', 'b', 'c'])]
+        votes = [OrdinalVote(['a', 'b', 'c'])]
         bc = BordaCount(['a', 'b', 'c'])
         result = bc.decide(votes)
         expected_result = Result(winner='a', loser=['b','c'])
@@ -34,6 +34,17 @@ class TestCardinal:
     def test_fractional_scoring_function(self):
         bc = BordaCount(['a', 'b', 'c'], BordaCount.fractional_score_function)
         bc.decide([OrdinalVote(['a', 'b', 'c'])])
-        print(bc.scores)
         assert bc.scores['a'] == 1 and bc.scores['b'] == 0.5 and (
-            bc.scores['c'] > 0.32 and  bc.scores['c'] < 0.34) 
+            bc.scores['c'] > 0.32 and  bc.scores['c'] < 0.34)
+        
+    def test_result_matches_scoring(self):
+        bc = BordaCount(['a', 'b', 'c'], BordaCount.fractional_score_function)
+        result = bc.decide([OrdinalVote(['a', 'b', 'c'])])
+        expected_result = Result(winner='a', loser=['b', 'c'])
+        assert(result == expected_result)
+    
+    def test_result_of_more_than_3(self): 
+        bc = BordaCount(['a', 'b', 'c', 'd'])
+        result = bc.decide([OrdinalVote(['a', 'b', 'c', 'd'])])
+        expected_result = Result(winner='a', loser=['b', 'c', 'd'])
+        assert(result == expected_result)

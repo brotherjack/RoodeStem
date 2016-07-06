@@ -150,11 +150,11 @@ class VotingSystem(object, metaclass=ABCMeta):
         winner, loser = (res.winner, res.loser)
         for itm in desclist[2:]:
             if itm[1] > bar:
-                loser = safe_list_append(res.winner, res.loser)
+                loser = safe_list_append(winner, loser)
                 winner = itm[0]
                 bar = itm[1]
             elif itm[1] < bar:
-                loser = safe_list_append(itm[0], res.loser)
+                loser = safe_list_append(itm[0], loser)
             else:
                 winner = safe_list_append(res.winner, itm[0])
         res = Result(winner=winner, loser=loser)
