@@ -18,6 +18,6 @@ class TestResult:
         res = Result(winner=['a', 'b', 'c'], tied=['b','c'])
         assert res == Result(tied=['a', 'b', 'c'])
     
-    def test_passed_multiple_losers(self):
+    def test_passed_all_losers(self):
         res = Result(loser=['a', 'b', 'c'])
-        assert res == Result(loser=['a', 'b', 'c'], tied=['a','b'])
+        assert res == Result(tied=['a', 'b', 'c'])

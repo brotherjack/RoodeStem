@@ -93,6 +93,7 @@ class Result:
             if self.loser == []:
                 raise TypeError("Null result object is not permissible.")
             self._tied = self._loser
+            self._loser = []
             return
         
         if type(self.winner) is list:
@@ -103,10 +104,6 @@ class Result:
                 for winner in self.winner:
                     if winner not in self.tied:
                         self._tied.append(winner)
-            else:
-                for loser in self.loser:
-                    if loser not in self.tied:
-                        self._tied.append(loser)
             self._winner = []
              
     
@@ -118,7 +115,8 @@ class Result:
     
     def __repr__(self):
         if self._tied:
-            return "<Result(tied={0})>".format(self._tied)
+            return "<Result(tied={0}), loser={1}>".format(self._tied,
+                                                          self._loser)
         else:
             return "<Result(winner={0}, loser={1})>".format(self._winner,
                                                             self._loser)
@@ -156,8 +154,10 @@ class VotingSystem(object, metaclass=ABCMeta):
             elif itm[1] < bar:
                 loser = safe_list_append(itm[0], loser)
             else:
-                winner = safe_list_append(res.winner, itm[0])
-        res = Result(winner=winner, loser=loser)
+                winner = safe_list_append(winner, itm[0])
+        
+        res = Result(tied=res.tied, loser=loser) if res.tied\
+                            else Result(winner=winner, loser=loser)
         return res
 
 class OrdinalSystem(VotingSystem):
