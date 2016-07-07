@@ -21,3 +21,7 @@ class TestResult:
     def test_passed_all_losers(self):
         res = Result(loser=['a', 'b', 'c'])
         assert res == Result(tied=['a', 'b', 'c'])
+    
+    def test_passed_all_winners(self):
+        res = Result(winner=['a', 'b', 'c'])
+        assert res == Result(tied=['a', 'b', 'c'])

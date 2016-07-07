@@ -144,8 +144,8 @@ class VotingSystem(object, metaclass=ABCMeta):
 
     def _return_results(self, results):
         desclist = sorted(results.items(), key=lambda x: x[1], reverse=True)
-        res, bar = Result.ord_items(desclist[0], desclist[1])
-        winner, loser = (res.winner, res.loser)
+        res, bar = Result.ord_items(desclist[0], desclist[1])        
+        winner, loser = (res.tied, []) if res.tied else (res.winner, res.loser)
         for itm in desclist[2:]:
             if itm[1] > bar:
                 loser = safe_list_append(winner, loser)
@@ -156,8 +156,7 @@ class VotingSystem(object, metaclass=ABCMeta):
             else:
                 winner = safe_list_append(winner, itm[0])
         
-        res = Result(tied=res.tied, loser=loser) if res.tied\
-                            else Result(winner=winner, loser=loser)
+        res = Result(winner=winner, loser=loser)
         return res
 
 class OrdinalSystem(VotingSystem):
