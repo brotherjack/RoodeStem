@@ -44,7 +44,9 @@ class BordaCount(CardinalSystem):
     def choices(self):
         return self._choices    
         
-    def decide(self, votes):
+    def decide(self, votes, reset_scores=True):
+        if list(filter(lambda x: x > 0, self.scores.values())) and reset_scores:
+            self.scores = {k:0 for k in self.scores.keys()}
         for vote in votes:
             for cand, score in zip(vote, self.score_fn(vote)):
                 self.scores[cand] += score

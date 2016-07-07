@@ -19,7 +19,9 @@ class TestCardinal:
     def test_cardinal_system_is_abstract(self):
         with pytest.raises(TypeError):
             cardsys = CardinalSystem()
-    
+
+
+class TestBordaCount:
     def test_borda_count(self):
         votes = [OrdinalVote(['a', 'b', 'c'])]
         bc = BordaCount(['a', 'b', 'c'])
@@ -48,3 +50,17 @@ class TestCardinal:
         result = bc.decide([OrdinalVote(['a', 'b', 'c', 'd'])])
         expected_result = Result(winner='a', loser=['b', 'c', 'd'])
         assert(result == expected_result)
+    
+    def test_reset_score_default(self):
+        bc = BordaCount(['a', 'b'])
+        bc.decide([OrdinalVote(['a', 'b'])])
+        # Now decide again, scores should reset
+        bc.decide([OrdinalVote(['a', 'b'])])
+        assert(bc.scores['a'] == 1 and bc.scores['b'] == 0) 
+        
+    def test_reset_score_optional(self):
+        bc = BordaCount(['a', 'b'])
+        bc.decide([OrdinalVote(['a', 'b'])])
+        # Now decide again, scores should NOT reset
+        bc.decide([OrdinalVote(['a', 'b'])], reset_scores=False)
+        assert(bc.scores['a'] == 2) 
