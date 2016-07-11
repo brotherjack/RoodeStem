@@ -1,0 +1,10 @@
+[Core]
+Name = Borda Scoring Example 
+Module = BordaScoringExample
+
+[Documentation]
+Nickname = bse
+Author = Thomas Adriaan Hellinger
+Version = 1.0.0
+Website = http://hellingersreview.org
+Description = An example showing the difference between scoring algorithms for the Borda Count, and how they can compensate for strategic voting.
