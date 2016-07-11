@@ -32,6 +32,7 @@ class BordaScoringExample(Scenario, IPlugin):
 
     def run(self, rn=10):
         self._import()
+        assertionPass = 0
         for r in range(0, rn):
             print("Choices are: {0}".format(self.choices))
             votes = []
@@ -58,9 +59,22 @@ class BordaScoringExample(Scenario, IPlugin):
 
             bc = BordaCount(self.choices)
             print("bc is {0}".format(bc))
-            results = bc.decide(votes)
+            results2 = bc.decide(votes)
             msg = "Results with standard scoring fn: {0}\nScores: {1}"
-            print(msg.format(results, bc.scores))
+            print(msg.format(results2, bc.scores))
+            
+            try:
+                if results.tied:
+                    assert('a' in results.tied and 'd' in results.tied)
+                else:
+                    assert('a' in results.winner or 'd' in results.winner)
+                assert('b' in results.loser and 'c' in results.loser)
+            except AssertionError as ae:
+                print(ae.message)
+            else:
+                assertionPass += 1
+        
+        print("Assertion passed on {0} runs...".format(assertionPass))
             
     @property
     def description(self):
