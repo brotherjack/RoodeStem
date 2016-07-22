@@ -17,11 +17,18 @@ Currently the two simulations can be run by "roodestem scenario run \<ScenarioNa
 
 * Revision History: 
 0.0.1           Added test for detecting Condorcet Paradox
+
 v0.1.0          Basic BordaCount and CondorcetMethod available for simulation.
+
 v0.1.1          Profit?
+
 v0.1.2          Improved Result class
+
 v0.1.3          Added simulations package with Scenario and RadomCondorcet classes.
+
 v0.2.1          New system for implementing scenarios as plugins.
+
 v0.2.2          Fixed several bugs concerning results.
+
 v0.2.3          {Nudey Monkey - Alpha Business}          Added usable CardinalVote class 
 
