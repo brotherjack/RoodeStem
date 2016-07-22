@@ -34,7 +34,7 @@ class App(object):
         parser = argparse.ArgumentParser(
             prog="RoodeStem",
             description='Voting system implementation and simulator',
-            usage='''app <command> [<args>]
+            usage='''roodestem <command> [<args>]
 
 RoodeStem commands are:
    scenario    Manage scenarios

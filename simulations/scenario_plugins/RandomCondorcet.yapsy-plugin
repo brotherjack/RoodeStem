@@ -7,4 +7,4 @@ Nickname = rc
 Author = Thomas Adriaan Hellinger
 Version = 1.0.0
 Website = http://hellingersreview.org
-Description = A random series of votes using the condorcet system on a number of candidates. By default the number of voters is 10.
+Description = A random series of votes using the Condorcet system on a number of candidates. By default the number of voters is 10.
