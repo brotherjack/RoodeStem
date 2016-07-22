@@ -16,6 +16,7 @@ Currently the two simulations can be run by "roodestem scenario run \<ScenarioNa
 "roodestem scenario --list" shows scenario names with spaces, and their respective aliases. 
 
 * Revision History: 
+
 | Version Number | Release Name | Notes                                                        |
 -----------------|--------------|--------------------------------------------------------------|
 | 0.0.1            |              | Added test for detecting Condorcet Paradox |
