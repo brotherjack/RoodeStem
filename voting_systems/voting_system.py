@@ -213,8 +213,29 @@ class OrdinalVote(Vote):
         return "<OrdinalVote: {0}>".format(self._choices)
 
 class CardinalVote(Vote):
+    def __init__(self, choices, score_range=(0,10)):
+        self._choices = choices
+        self.score_range_min = score_range[0]
+        self.score_range_max = score_range[1]
+        
+        self._check_ranges() 
+        
     @property    
     def choices(self):
         return self._choices
-
-        
+    
+    def _check_ranges(self):
+        if self.score_range_min >= self.score_range_max:
+            raise TypeError("Minimum value must be LESS THAN maximum value.")
+        for choice, score in self._choices.items():
+            if score > self.score_range_max or score < self.score_range_min:
+                msg = "{0} falls outside of range [{1}, {2}] for candidate {3}"
+                raise VotingError(
+                    msg.format(
+                        score, 
+                        self.score_range_min, 
+                        self.score_range_max,
+                        choice
+                    )
+                )
+        return

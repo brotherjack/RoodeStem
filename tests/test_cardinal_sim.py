@@ -7,7 +7,8 @@ import pytest
 
 from voting_systems.voting_system import(
     CardinalSystem, 
-    OrdinalVote, 
+    OrdinalVote,
+    CardinalVote, 
     Result,
     VotingError,
 )
@@ -19,7 +20,19 @@ class TestCardinal:
     def test_cardinal_system_is_abstract(self):
         with pytest.raises(TypeError):
             cardsys = CardinalSystem()
-
+    
+    def test_cardinal_vote_instantiation(self):
+        cv = CardinalVote({'a':0, 'b':5, 'c':10}, (0,10))
+        assert(type(cv) == CardinalVote)
+    
+    def test_cardinal_vote_out_of_range(self):
+        with pytest.raises(VotingError):
+            cv = CardinalVote({'a':0, 'b':5, 'c':100}, (0,10))
+    
+    def test_cardinal_range_set(self):
+        with pytest.raises(TypeError):
+            cv = CardinalVote({'a':0, 'b':5, 'c':10}, (10,0))
+        
 
 class TestBordaCount:
     def test_borda_count(self):
