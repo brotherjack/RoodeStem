@@ -13,6 +13,7 @@ from voting_systems.voting_system import(
     VotingError,
 )
 from voting_systems.borda import BordaCount
+from voting_systems.ranked_voting import RankedVoting
 
 
 class TestCardinal:
@@ -77,3 +78,34 @@ class TestBordaCount:
         # Now decide again, scores should NOT reset
         bc.decide([OrdinalVote(['a', 'b'])], reset_scores=False)
         assert(bc.scores['a'] == 2) 
+
+class TestRankedVoting:
+    def test_ranked_voting(self):
+        rv = RankedVoting(['a', 'b', 'c'], (0, 10))
+        assert(type(rv) is RankedVoting)
+    
+    def test_ranked_voting_score_bounds_checking(self):
+        with pytest.raises(TypeError):
+            rv = RankedVoting(['a', 'b', 'c'], (10, 0))
+    
+    def test_simple_ranked_voting_scenario(self):
+        rng = (0, 10) 
+        rv = RankedVoting(['a', 'b', 'c'], rng)
+        votes = [
+            CardinalVote({'a': 10, 'b': 5, 'c': 0}, rng),
+            CardinalVote({'a': 7, 'b': 3, 'c': 1}, rng),
+            CardinalVote({'a': 2, 'b': 0, 'c': 0}, rng),
+        ]
+        res = rv.decide(votes)
+        assert(res.winner == 'a')
+    
+    def test_simple_ranked_voting_tied_scenario(self):
+        rng = (0, 10) 
+        rv = RankedVoting(['a', 'b', 'c'], rng)
+        votes = [
+            CardinalVote({'a': 10, 'b': 10, 'c': 0}, rng),
+            CardinalVote({'a': 10, 'b': 10, 'c': 1}, rng),
+            CardinalVote({'a': 10, 'b': 10, 'c': 0}, rng),
+        ]
+        res = rv.decide(votes)
+        assert('a' in res.tied and 'b' in res.tied and 'c' in res.loser)

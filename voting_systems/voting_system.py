@@ -224,6 +224,9 @@ class CardinalVote(Vote):
     def choices(self):
         return self._choices
     
+    def get_scores(self):
+        return self.choices.items()
+    
     def _check_ranges(self):
         if self.score_range_min >= self.score_range_max:
             raise TypeError("Minimum value must be LESS THAN maximum value.")
