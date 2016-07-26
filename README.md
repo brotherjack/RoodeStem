@@ -1,19 +1,19 @@
 # RoodeStem
 Voting simulator and ethereum group decision making engine.
 
-* Current Version: 0.2.4 - {Nudey Monkey - Nude Again for the First Time}
+* Current Version: 0.2.5 - {Nudey Monkey - Nude Again for the Second Time}
 
-* State: Ethereum group decision making engine is fully etherial. Like not there at all. Not yet. Working on it. Will do, probably. Eventually. Maybe.
+* State: Ethereum group decision making engine is fully ethereal. Like not there at all. Not yet. Working on it. Will do, probably. Eventually. Maybe.
 
 Voting simulator runs two EXCITING simulations. You can make more too. Can't install them yet. HAH!
 
 * Install / Basic Use Guide: Runs as a standard python program on the command-line. I won't explain how to install Python, you can go to python.org to do that. Install you some Python3 if you haven't already.
 
-Just run "python setup.py install", as is customary.
+Just run `python setup.py install`, as is customary.
 
-Currently the two simulations can be run by "roodestem scenario run \<ScenarioName/alias\>"
+Currently the two simulations can be run by "`roodestem scenario run` \<ScenarioName/alias\>"
 
-"roodestem scenario --list" shows scenario names with spaces, and their respective aliases. 
+`roodestem scenario --list` shows scenario names with spaces, and their respective aliases. 
 
 * Revision History: 
 
@@ -27,5 +27,6 @@ Currently the two simulations can be run by "roodestem scenario run \<ScenarioNa
 | v0.2.1           |              | New system for implementing scenarios as plugins.
 | v0.2.2           |              | Fixed several bugs concerning results.
 | v0.2.3           | Nudey Monkey - Alpha Business                | Added usable CardinalVote class |
-| v0.2.4           | Nudey Monkey - Nude Again for the First Time | Added RankedVoting              |           
+| v0.2.4           | Nudey Monkey - Nude Again for the First Time | Added RankedVoting              |
+| v0.2.5           | Nudey Monkey - Nude Again for the Second Time | Added Voters, VotingMetrics, and NolanCharts              |            
 
