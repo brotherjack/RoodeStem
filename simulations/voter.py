@@ -61,3 +61,5 @@ class NolanChart(VotingMetric):
             sm += pow(self._dimensions[k] - vm.dimensions[k], 2)
         sm = sqrt(sm / pow(NolanChart.MAX_DISTANCE, 2))
         return rng[1] - rng[1]*sm 
+
+Thomas_Adriaan_Hellinger = Voter(NolanChart(-0.75, -0.95))
