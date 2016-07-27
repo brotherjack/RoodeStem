@@ -8,7 +8,7 @@ Created on Jul 22, 2016
 from setuptools import setup
 
 setup(name='RoodeStem',
-      version='0.2.5',
+      version='0.3.1',
       description='Voting simulator and ethereum group decision making engine.',
       author='Thomas Adriaan Hellinger',
       author_email='thellinger@acm.org',

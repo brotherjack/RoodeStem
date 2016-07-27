@@ -1,7 +1,7 @@
 # RoodeStem
 Voting simulator and ethereum group decision making engine.
 
-* Current Version: 0.2.5 - {Nudey Monkey - Nude Again for the Second Time}
+* Current Version: 0.3.1 - {Nudey Monkey - Nude Again for the First Time}
 
 * State: Ethereum group decision making engine is fully ethereal. Like not there at all. Not yet. Working on it. Will do, probably. Eventually. Maybe.
 
@@ -27,6 +27,7 @@ Currently the two simulations can be run by "`roodestem scenario run` \<Scenario
 | v0.2.1           |              | New system for implementing scenarios as plugins.
 | v0.2.2           |              | Fixed several bugs concerning results.
 | v0.2.3           | Nudey Monkey - Alpha Business                | Added usable CardinalVote class |
-| v0.2.4           | Nudey Monkey - Nude Again for the First Time | Added RankedVoting              |
-| v0.2.5           | Nudey Monkey - Nude Again for the Second Time | Added Voters, VotingMetrics, and NolanCharts              |            
+| v0.2.4           | Nudey Monkey - Alpha Business  | Added RankedBallot              |
+| v0.3.0           | Nudey Monkey - Nude Again for the First Time | Added Voters, VotingMetrics, and NolanCharts              |
+| v0.3.1           | Nudey Monkey - Nude Again for the First Time | Added PluralityBallot              |            
 
