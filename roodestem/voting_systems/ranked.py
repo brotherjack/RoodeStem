@@ -20,7 +20,7 @@ except SystemError:
         Result
     )
 
-class RankedVoting(CardinalSystem):
+class RankedBallot(CardinalSystem):
     def __init__(self, choices, score_range):
         super().__init__(choices)
         self._choices = choices
@@ -63,5 +63,5 @@ class RankedVoting(CardinalSystem):
                     self.scores[cand] += score
     
     def __repr__(self):
-        msg = "<RankedVoting: choices={0}, score_range=({1}, {2})>"
+        msg = "<RankedBallot: choices={0}, score_range=({1}, {2})>"
         return msg.format(self.choices, self.min_score, self.max_score)
