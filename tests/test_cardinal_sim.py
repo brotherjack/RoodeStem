@@ -14,6 +14,7 @@ from roodestem.voting_systems.voting_system import(
 )
 from roodestem.voting_systems.borda import BordaCount
 from roodestem.voting_systems.ranked import RankedBallot
+from roodestem.voting_systems.plurality import PluralityBallot
 
 
 class TestCardinal:
@@ -79,33 +80,76 @@ class TestBordaCount:
         bc.decide([OrdinalVote(['a', 'b'])], reset_scores=False)
         assert(bc.scores['a'] == 2) 
 
-class TestRankedVoting:
-    def test_ranked_voting(self):
-        rv = RankedBallot(['a', 'b', 'c'], (0, 10))
-        assert(type(rv) is RankedBallot)
-    
-    def test_ranked_voting_score_bounds_checking(self):
+class TestRankedBallot:    
+    def test_ranked_ballot_score_bounds_checking(self):
         with pytest.raises(TypeError):
-            rv = RankedBallot(['a', 'b', 'c'], (10, 0))
+            rb = RankedBallot(['a', 'b', 'c'], (10, 0))
     
-    def test_simple_ranked_voting_scenario(self):
+    def test_simple_ranked_ballot_scenario(self):
         rng = (0, 10) 
-        rv = RankedBallot(['a', 'b', 'c'], rng)
+        rb = RankedBallot(['a', 'b', 'c'], rng)
         votes = [
             CardinalVote({'a': 10, 'b': 5, 'c': 0}, rng),
             CardinalVote({'a': 7, 'b': 3, 'c': 1}, rng),
             CardinalVote({'a': 2, 'b': 0, 'c': 0}, rng),
         ]
-        res = rv.decide(votes)
+        res = rb.decide(votes)
         assert(res.winner == 'a')
     
-    def test_simple_ranked_voting_tied_scenario(self):
+    def test_simple_ranked_ballot_tied_scenario(self):
         rng = (0, 10) 
-        rv = RankedBallot(['a', 'b', 'c'], rng)
+        rb = RankedBallot(['a', 'b', 'c'], rng)
         votes = [
             CardinalVote({'a': 10, 'b': 10, 'c': 0}, rng),
             CardinalVote({'a': 10, 'b': 10, 'c': 1}, rng),
             CardinalVote({'a': 10, 'b': 10, 'c': 0}, rng),
         ]
-        res = rv.decide(votes)
+        res = rb.decide(votes)
         assert('a' in res.tied and 'b' in res.tied and 'c' in res.loser)
+
+class TestPlurality:
+    def test_simple_plurality_ballot_scenario(self):
+        pb = PluralityBallot(['a', 'b', 'c'])
+        rng = (0,1)
+        votes = [
+            CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+            CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+            CardinalVote({'a': 0, 'b': 0, 'c': 1}, rng),
+        ]
+        res = pb.decide(votes)
+        assert(res.winner == 'a')
+    
+    
+    def test_plurality_ballot_allows_only_one_choice(self):
+        with pytest.raises(VotingError):
+            pb = PluralityBallot(['a', 'b', 'c'])
+            rng = (0,1)
+            votes = [
+                CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+                CardinalVote({'a': 1, 'b': 0, 'c': 1}, rng),
+                CardinalVote({'a': 0, 'b': 0, 'c': 1}, rng),
+            ]
+            res = pb.decide(votes)
+            
+    def test_abstain_on(self):
+        pb = PluralityBallot(['a', 'b', 'c'], can_abstain=True)
+        rng = (0,1)
+        votes = [
+            CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+            CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+            CardinalVote({'a': 0, 'b': 0, 'c': 0}, rng),
+            CardinalVote({'a': 0, 'b': 0, 'c': 1}, rng),
+        ]
+        res = pb.decide(votes)
+        assert(res.winner == 'a')
+    
+    def test_abstain_off(self):
+        with pytest.raises(VotingError):
+            pb = PluralityBallot(['a', 'b', 'c'], can_abstain=False)
+            rng = (0,1)
+            votes = [
+                CardinalVote({'a': 1, 'b': 0, 'c': 0}, rng),
+                CardinalVote({'a': 0, 'b': 0, 'c': 0}, rng),
+                CardinalVote({'a': 0, 'b': 0, 'c': 1}, rng),
+            ]
+            res = pb.decide(votes)
