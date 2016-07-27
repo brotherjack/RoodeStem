@@ -5,7 +5,7 @@ Created on Jul 25, 2016
 '''
 import pytest
 
-from simulations.voter import Voter, NolanChart
+from roodestem.simulations.voter import Voter, NolanChart
 
 
 class TestVoter:

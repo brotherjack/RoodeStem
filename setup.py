@@ -13,7 +13,7 @@ setup(name='RoodeStem',
       author='Thomas Adriaan Hellinger',
       author_email='thellinger@acm.org',
       url='https://github.com/brotherjack/RoodeStem',
-      packages=['.', 'simulations', 'voting_systems'],
+      packages=['roodestem'],
         entry_points={
             'console_scripts': [
                 'roodestem = app:App',

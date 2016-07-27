@@ -5,12 +5,12 @@ Created on Jun 10, 2016
 '''
 import pytest
     
-from voting_systems.voting_system import (
+from roodestem.voting_systems.voting_system import (
     OrdinalSystem, 
     OrdinalVote, 
     VotingError,
 )
-from voting_systems.condorcet import CondorcetMethod, CondorcetParadox
+from roodestem.voting_systems.condorcet import CondorcetMethod, CondorcetParadox
 
 
 class TestOrdinal:

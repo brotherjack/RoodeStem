@@ -5,15 +5,15 @@ Created on Jun 15, 2016
 '''
 import pytest
 
-from voting_systems.voting_system import(
+from roodestem.voting_systems.voting_system import(
     CardinalSystem, 
     OrdinalVote,
     CardinalVote, 
     Result,
     VotingError,
 )
-from voting_systems.borda import BordaCount
-from voting_systems.ranked_voting import RankedVoting
+from roodestem.voting_systems.borda import BordaCount
+from roodestem.voting_systems.ranked_voting import RankedVoting
 
 
 class TestCardinal:

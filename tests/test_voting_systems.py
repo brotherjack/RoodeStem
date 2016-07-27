@@ -5,7 +5,7 @@ Created on Jun 29, 2016
 '''
 import pytest
 
-from voting_systems.voting_system import Result
+from roodestem.voting_systems.voting_system import Result
 
 
 class TestResult:
