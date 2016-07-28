@@ -1,22 +1,33 @@
 # RoodeStem
+**Current Version: 0.3.1 - {Nudey Monkey - Nude Again for the First Time}**
+
 Voting simulator and ethereum group decision making engine.
 
-* Current Version: 0.3.1 - {Nudey Monkey - Nude Again for the First Time}
+### State:
 
-* State: Ethereum group decision making engine is fully ethereal. Like not there at all. Not yet. Working on it. Will do, probably. Eventually. Maybe.
+* Ethereum group decision making engine is fully ethereal. Like not there at all. Not yet. Working on it. Will do, probably. Eventually. Maybe.
+    * The current plan is to have a program which can generate contracts in Solidity which will implement the different voting conventions outlined in the simulator. 
 
-Voting simulator runs two EXCITING simulations. You can make more too. Can't install them yet. HAH!
+* Voting simulator contains two EXCITING simulations. You can make more too. Can't install them yet. HAH!
 
-* Install / Basic Use Guide: Runs as a standard python program on the command-line. I won't explain how to install Python, you can go to python.org to do that. Install you some Python3 if you haven't already.
+### Install / Basic Use Guide:
+
+Runs as a standard python program on the command-line. I won't explain how to install Python, you can go to python.org to do that. Install you some Python3 if you haven't already.
+
+Dependencies can be installed via pip, specifically running `pip install -r requirements.txt`. If you want to install the development tools being used then run `pip install -r requirements/dev.txt`, in addition to the previous command.
 
 Just run `python setup.py install`, as is customary.
+
+##### Using the command line program
 
 Currently the two simulations can be run by "`roodestem scenario run` \<ScenarioName/alias\>"
 
 `roodestem scenario --list` shows scenario names with spaces, and their respective aliases. 
 
-* Revision History: 
 
+
+### Revision History: 
+______________________________________
 | Version Number | Release Name | Notes                                                        |
 -----------------|--------------|--------------------------------------------------------------|
 | 0.0.1            |              | Added test for detecting Condorcet Paradox |
