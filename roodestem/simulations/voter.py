@@ -78,6 +78,17 @@ class Voter(object):
         return "<Voter: {0}>".format(self.name)
 
 class VotingMetric(object, metaclass=ABCMeta):
+    """System for determining position on an n-dimensional ideological space
+    
+    Args:
+        dimensions (:obj:`dict` of :obj:`str` to :obj:`float`): Each dimension
+            is labeled by the name of the dimension with the value being the
+            ideological position. The position is -1 on one end of the spectrum 
+            to 1 on the other, with 0 representing a perfect balance between
+            both poles.
+        cardinality (:obj:`const int`): A constant indicating the number of
+            ideological dimensions on the specrtum.  
+    """
     @abstractmethod
     def __init__(self, **kwargs):
         pass
