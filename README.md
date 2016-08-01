@@ -40,5 +40,6 @@ ______________________________________
 | v0.2.3           | Nudey Monkey - Alpha Business                | Added usable CardinalVote class |
 | v0.2.4           | Nudey Monkey - Alpha Business  | Added RankedBallot              |
 | v0.3.0           | Nudey Monkey - Nude Again for the First Time | Added Voters, VotingMetrics, and NolanCharts              |
-| v0.3.1           | Nudey Monkey - Nude Again for the First Time | Added PluralityBallot              |            
+| v0.3.1           | Nudey Monkey - Nude Again for the First Time | Added PluralityBallot              | 
+| v0.3.2           | Nudey Monkey - Nude Again for the First Time | Added labels to the positions NolanChart |          
 
