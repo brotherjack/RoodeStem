@@ -1,3 +1,17 @@
+# IPython files
+*.ipynb
+.ipynb_checkpoints/
+
+# Documentation
+docs/
+
+# Keep the development js/css out of github
+roodestem/web/static/js/bootstrap.js
+roodestem/web/static/js/d3.js
+roodestem/web/static/js/jquery-3.1.0.js
+roodestem/web/static/css/bootstrap.css
+roodestem/web/static/css/bootstrap-theme.css
+
 *.py[cod]
 
 # C extensions
