@@ -3,40 +3,41 @@ Created on Jul 6, 2016
 
 @author: Thomas Adriaan Hellinger
 '''
-from functools import wraps
-from importlib import import_module
+import random
+import sys
 
-from yapsy.IPlugin import IPlugin
-
+from voting_systems.borda import BordaCount
+from voting_systems.voting_system import OrdinalVote
 from simulations.scenarios import Scenario
 
 
-class BordaScoringExample(Scenario, IPlugin):
+class BordaScoringDemo(Scenario):
     def __init__(self, choices=['a','b','c', 'd']):
         self._choices = choices
-        self.mods = [
-            ('voting_systems.borda', 'BordaCount'), 
-            ('voting_systems.voting_system', 'OrdinalVote'),
-            ('random',) 
-        ]
-    
-    
-    def _import(self):
-        for mod in self.mods:
-            if len(mod) > 1:
-                module = __import__(mod[0], fromlist=mod[1:])
-                for cls in mod[1:]:
-                    globals()[cls] = getattr(module, cls)
-            else:
-                globals()[mod[0]] = import_module(mod[0])
 
-    def run(self, rn=10):
-        self._import()
+    def run(self, rn=10, randomSeed=True):
+        output = {
+            "choices": self.choices,
+            "assertionPass": 0,
+            "rounds":[], 
+        }
         assertionPass = 0
         for r in range(0, rn):
-            print("Choices are: {0}".format(self.choices))
+            curr_round = {
+                "round_name": "round_{0}".format(r),
+                "seed": "",
+                "assertionPass": True,
+                "votes": [],
+                "fractional_scoring_results": "",
+                "standard_scoring_results": ""
+            }
+            #print("Choices are: {0}".format(self.choices))
             votes = []
-            random.seed(r)
+            seed = r
+            # TODO: Make sure that random seed is not reselected...ever 
+            if randomSeed:
+                seed = random.randint(0, sys.maxsize)
+            curr_round['seed'] = seed
             randselects = [random.randint(0,1) for _ in range(0, 100)]
             for i in range(0, 50): 
                 if randselects[i] == 0:
@@ -52,16 +53,19 @@ class BordaScoringExample(Scenario, IPlugin):
     
             bc = BordaCount(self.choices,
                             score_fn=BordaCount.fractional_score_function)
-            print("bc is {0}".format(bc))
+            #print("bc is {0}".format(bc))
+            curr_round['votes'] = [v.choices for v in votes]
             results = bc.decide(votes)
             msg = "Results with fractional scoring fn: {0}\nScores: {1}"
-            print(msg.format(results, bc.scores))
+            curr_round['fractional_scoring_results'] = msg.format(results, bc.scores)
+            #print(msg.format(results, bc.scores))
 
             bc = BordaCount(self.choices)
-            print("bc is {0}".format(bc))
+            #print("bc is {0}".format(bc))
             results2 = bc.decide(votes)
             msg = "Results with standard scoring fn: {0}\nScores: {1}"
-            print(msg.format(results2, bc.scores))
+            #print(msg.format(results2, bc.scores))
+            curr_round['standard_scoring_results'] = msg.format(results2, bc.scores)
             
             try:
                 if results.tied:
@@ -71,10 +75,13 @@ class BordaScoringExample(Scenario, IPlugin):
                 assert('b' in results.loser and 'c' in results.loser)
             except AssertionError as ae:
                 print(ae.message)
+                curr_round['assertionPass'] = False
             else:
                 assertionPass += 1
-        
-        print("Assertion passed on {0} runs...".format(assertionPass))
+            output['rounds'].append(curr_round)
+        output['assertionPass'] = assertionPass
+        return output
+        #print("Assertion passed on {0} runs...".format(assertionPass))
             
     @property
     def description(self):
@@ -89,4 +96,4 @@ class BordaScoringExample(Scenario, IPlugin):
         self._choices = choices
     
     def __repr__(self):
-        return "<RandomCondorcet: choices={0}>".format(self.choices)
+        return "<BordaScoringDemo: choices={0}>".format(self.choices)

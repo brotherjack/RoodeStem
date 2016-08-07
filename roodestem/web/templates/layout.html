@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>{% block page_title %}
+  
+    Roodestem
+  
+    {% endblock %}
+  </title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+		{% block body %}
+		{% with form=form  %}
+		{% include "nav.html" %}
+		{% endwith %}
+		
+
+		<header>{% block header %}{% endblock %}</header>
+		<div class="{% block content_class %}container{% endblock content_class %}">
+
+				<div role="main">
+						{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+						<div class="row">
+								<div class="col-md-12">
+										{% for category, message in messages %}
+										<div class="alert alert-{{ category }}">
+												<a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
+											{{message}}
+										</div><!-- end .alert -->
+										{% endfor %}
+								</div><!-- end col-md -->
+						</div><!-- end row -->
+										{% endif %}
+						{% endwith %}
+
+						{% block content %}{% endblock %}
+				</div>
+
+		</div>
+
+		<script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% endblock %}
+</body>
+</html>
