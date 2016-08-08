@@ -10,7 +10,7 @@ from voting_systems.voting_system import OrdinalVote
 from simulations.scenarios import Scenario
 
 
-class RandomCondorcet(Scenario):
+class RandomCondorcetDemo(Scenario):
     def __init__(self, choices=['a','b','c', 'd']):
         self._choices = choices
     
@@ -44,4 +44,4 @@ class RandomCondorcet(Scenario):
         self._choices = choices
     
     def __repr__(self):
-        return "<RandomCondorcet: choices={0}>".format(self.choices)
+        return "<RandomCondorcetDemo: choices={0}>".format(self.choices)

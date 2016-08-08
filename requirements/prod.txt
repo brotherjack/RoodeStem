@@ -1,2 +1,4 @@
 # Everything needed in production
 Flask>=0.11.1
+wtforms>=2.1.0
+Flask-WTF>=0.10.3
