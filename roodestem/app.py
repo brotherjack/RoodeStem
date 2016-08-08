@@ -21,5 +21,6 @@ def index():
 
 if __name__ == '__main__':
     app.register_blueprint(blueprint)
+    app.secret_key = "bugger this for a game of solders"
     app.run(debug=True)
     

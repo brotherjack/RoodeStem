@@ -3,6 +3,7 @@
   <section name="formSection">
     {% if form %}
       <form id="randomCondorcetSettings" class="form form-register" method="POST" action="" role="form">
+        {{ form.hidden_tag() }}
         <div class="form-group">
           {{ form.number_of_voters.label }}
           {{ form.number_of_voters(class_="form-control") }}
@@ -16,7 +17,7 @@
     <div class="container">
       <ul class="list-group">
         {% for msg in output['msgs'] %}
-          <li class="list-group-item">{{msg}}</li>
+          <li class="list-group-item">{{msg|safe}}</li>
         {% endfor %}
       </ul>
     </div>

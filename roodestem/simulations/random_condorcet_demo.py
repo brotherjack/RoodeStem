@@ -22,10 +22,8 @@ class RandomCondorcetDemo(Scenario):
                 for i in range(0, rn)
         ]
         results = ""
-        try:
-            results = cm.decide(votes, verbose=True)
-        except CondorcetParadox as cp:
-            results = cp
+        results = cm.decide(votes, verbose=True,
+                            colors=["red", "blue", "green", "yellow"])
         return {
             "choices": self.choices,
             "votes": [v.choices for v in votes],

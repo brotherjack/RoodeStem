@@ -36,13 +36,22 @@ class CondorcetMethod(OrdinalSystem):
     def choices(self):
         return self._choices
 
-    def decide(self, votes, verbose=False):
-        ordering, msgs = self._run_comparisons(votes, verbose)
+    def decide(self, votes, verbose=False, colors=None):
+        ordering, msgs = self._run_comparisons(votes, verbose, colors)
         self._make_order_matrix(ordering)
         results = {}
         for k in self._order_matrix.keys():
-            results[k] = sum(self._order_matrix[k].values()) 
-        self._check_for_condercet_paradox()
+            results[k] = sum(self._order_matrix[k].values())
+        try: 
+            self._check_for_condercet_paradox()
+        except CondorcetParadox as cp:
+            if verbose:
+                return {
+                'results': cp.msg,
+                'msgs': msgs
+            }
+            else:
+                return cp.msg
         if verbose:
             return {
             'results': self._return_results(results),
@@ -51,15 +60,22 @@ class CondorcetMethod(OrdinalSystem):
         else:
             return self._return_results(results)
 
-    def _run_comparisons(self, votes, verbose):
+    def _run_comparisons(self, votes, verbose, colors):
         round_scores = {}
         ordering = []
         msgs = []
+        color_map = {}
+        if colors:
+            color_map = {k:v for k,v in zip(self.choices, colors)}
         for c1, c2 in combinations(self._choices, 2):
-            contest = "{0} v.s. {1}".format(c1,c2)
+            contest = ""
+            if colors:
+                contest = "<span style='color: {2}'>{0}</span> v.s. "
+                contest += "<span style='color: {3}'>{1}</span>"
+                contest = contest.format(c1,c2,color_map[c1],color_map[c2])
+            else:
+                contest = "{0} v.s. {1}".format(c1,c2)
             round_scores[contest] = {c1:0, c2:0}
-            if verbose:
-                print(c1," v.s. ",c2)
             for vote in votes:
                 c1i = vote.ranking(c1)
                 c2i = vote.ranking(c2)
@@ -67,17 +83,34 @@ class CondorcetMethod(OrdinalSystem):
                     winner = c1 if c1i < c2i else c2
                     loser = c1 if c1i > c2i else c2
                     round_scores[contest][winner] += 1
-#                     if verbose:
-#                         msg = "{0} beats {1} in the vote {2}"
-#                         msgs.append(msg.format(winner, loser, vote))
                 else:
                     msg = "{0} does not display complete ordering"
                     raise VotingError(msg.format(vote))
             if verbose:
-                msg = "In contest, {0}: {1} has {2} votes, "
-                msg += "and {3} has {4} votes"
-                msgs.append(msg.format(contest, c1, round_scores[contest][c1],
-                                 c2, round_scores[contest][c2]))
+                msg= ""
+                if colors:
+                    if round_scores[contest][c1] > round_scores[contest][c2]:
+                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
+                        msg += "has <strong>{2}</strong> votes, "
+                        msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
+                    elif round_scores[contest][c1] < round_scores[contest][c2]:
+                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
+                        msg += "has {2} votes, "
+                        msg += "and <span style='color: {6}'>{3}</span> has <strong>{4}</strong> votes"
+                    else:
+                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
+                        msg += "has {2} votes, "
+                        msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
+                    msgs.append(msg.format(contest, c1, 
+                                round_scores[contest][c1],
+                                c2, round_scores[contest][c2],color_map[c1],
+                                color_map[c2]))
+                else:
+                    msg += "In contest, {0}: {1} has {2} votes, "
+                    msg += "and {3} has {4} votes"
+                    msgs.append(msg.format(contest, c1, 
+                                round_scores[contest][c1],
+                                c2, round_scores[contest][c2]))
             if round_scores[contest][c1] < round_scores[contest][c2]:
                 ordering.append(Result(winner=c2, loser=c1))
             elif round_scores[contest][c2] < round_scores[contest][c1]:
