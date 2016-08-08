@@ -37,17 +37,24 @@ class CondorcetMethod(OrdinalSystem):
         return self._choices
 
     def decide(self, votes, verbose=False):
-        ordering = self._run_comparisons(votes, verbose)
+        ordering, msgs = self._run_comparisons(votes, verbose)
         self._make_order_matrix(ordering)
         results = {}
         for k in self._order_matrix.keys():
             results[k] = sum(self._order_matrix[k].values()) 
         self._check_for_condercet_paradox()
-        return self._return_results(results)
+        if verbose:
+            return {
+            'results': self._return_results(results),
+            'msgs': msgs
+        }
+        else:
+            return self._return_results(results)
 
     def _run_comparisons(self, votes, verbose):
         round_scores = {}
         ordering = []
+        msgs = []
         for c1, c2 in combinations(self._choices, 2):
             contest = "{0} v.s. {1}".format(c1,c2)
             round_scores[contest] = {c1:0, c2:0}
@@ -60,16 +67,16 @@ class CondorcetMethod(OrdinalSystem):
                     winner = c1 if c1i < c2i else c2
                     loser = c1 if c1i > c2i else c2
                     round_scores[contest][winner] += 1
-                    if verbose:
-                        msg = "{0} beats {1} in the vote {2}"
-                        print(msg.format(winner, loser, vote))
+#                     if verbose:
+#                         msg = "{0} beats {1} in the vote {2}"
+#                         msgs.append(msg.format(winner, loser, vote))
                 else:
                     msg = "{0} does not display complete ordering"
                     raise VotingError(msg.format(vote))
             if verbose:
                 msg = "In contest, {0}: {1} has {2} votes, "
                 msg += "and {3} has {4} votes"
-                print(msg.format(contest, c1, round_scores[contest][c1],
+                msgs.append(msg.format(contest, c1, round_scores[contest][c1],
                                  c2, round_scores[contest][c2]))
             if round_scores[contest][c1] < round_scores[contest][c2]:
                 ordering.append(Result(winner=c2, loser=c1))
@@ -77,7 +84,7 @@ class CondorcetMethod(OrdinalSystem):
                 ordering.append(Result(winner=c1, loser=c2))
             else:
                 ordering.append(Result(tied=[c1,c2]))
-        return ordering  
+        return ordering, msgs  
 
     def _make_order_matrix(self, orders):
         for order in orders:

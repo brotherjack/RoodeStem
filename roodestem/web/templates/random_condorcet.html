@@ -12,7 +12,15 @@
         </div>
       </form>
     {% elif output %}
-      {{output}}
+    <p>The contest is among {{output['choices']}}</p>
+    <div class="container">
+      <ul class="list-group">
+        {% for msg in output['msgs'] %}
+          <li class="list-group-item">{{msg}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <p>So therefore, the outcome is: {{output['results']}}</p>
     {% endif %}
   </section>
 {% endblock %}

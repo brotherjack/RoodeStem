@@ -23,13 +23,14 @@ class RandomCondorcetDemo(Scenario):
         ]
         results = ""
         try:
-            results = cm.decide(votes)
+            results = cm.decide(votes, verbose=True)
         except CondorcetParadox as cp:
             results = cp
         return {
             "choices": self.choices,
             "votes": [v.choices for v in votes],
-            "results" : "{0}".format(results)
+            "results" : "{0}".format(results['results']),
+            "msgs": results['msgs']
         }
     @property
     def description(self):
