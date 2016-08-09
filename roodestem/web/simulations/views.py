@@ -44,7 +44,8 @@ class RandomCondorcetView(MethodView):
     def post(self):
         if self.form.validate():
             rc = RandomCondorcetDemo()
-            output = rc.run(self.form.number_of_voters.data)
+            output = rc.run(self.form.number_of_voters.data,
+                            self.form.seed_field.data)
             output['contests'] = RandomCondorcetView.format_round_scores(
                 output['round_scores']
             )

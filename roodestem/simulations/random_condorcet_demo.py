@@ -15,9 +15,10 @@ class RandomCondorcetDemo(Scenario):
     def __init__(self, choices=['a','b','c', 'd']):
         self._choices = choices
     
-    def run(self, rn=10):
+    def run(self, rn=10, seed=None):
         cm = CondorcetMethod(self.choices)
-        seed = random.randint(-1*sys.maxsize, sys.maxsize)
+        if not seed:
+            seed = random.randint(-1*sys.maxsize, sys.maxsize)
         random.seed(seed)
         votes = [
             OrdinalVote(
