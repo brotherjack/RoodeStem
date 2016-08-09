@@ -16,8 +16,8 @@
     <p>The contest is among {{output['choices']}}</p>
     <div class="container">
       <ul class="list-group">
-        {% for msg in output['msgs'] %}
-          <li class="list-group-item">{{msg|safe}}</li>
+        {% for contest in output['contests'] %}
+          <li class="list-group-item">{{contest|safe}}</li>
         {% endfor %}
       </ul>
     </div>

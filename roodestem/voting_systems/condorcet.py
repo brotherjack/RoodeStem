@@ -36,45 +36,26 @@ class CondorcetMethod(OrdinalSystem):
     def choices(self):
         return self._choices
 
-    def decide(self, votes, verbose=False, colors=None):
-        ordering, msgs = self._run_comparisons(votes, verbose, colors)
+    def decide(self, votes):
+        ordering, round_scores = self._run_comparisons(votes)
         self._make_order_matrix(ordering)
         results = {}
+        output = {'results': "", 'round_scores': round_scores}
         for k in self._order_matrix.keys():
             results[k] = sum(self._order_matrix[k].values())
         try: 
             self._check_for_condercet_paradox()
         except CondorcetParadox as cp:
-            if verbose:
-                return {
-                'results': cp.msg,
-                'msgs': msgs
-            }
-            else:
-                return cp.msg
-        if verbose:
-            return {
-            'results': self._return_results(results),
-            'msgs': msgs
-        }
-        else:
-            return self._return_results(results)
+            output['results'] = cp.msg
+            return output
+        output['results'] = self._return_results(results)
+        return output
 
-    def _run_comparisons(self, votes, verbose, colors):
+    def _run_comparisons(self, votes):
         round_scores = {}
         ordering = []
-        msgs = []
-        color_map = {}
-        if colors:
-            color_map = {k:v for k,v in zip(self.choices, colors)}
         for c1, c2 in combinations(self._choices, 2):
-            contest = ""
-            if colors:
-                contest = "<span style='color: {2}'>{0}</span> v.s. "
-                contest += "<span style='color: {3}'>{1}</span>"
-                contest = contest.format(c1,c2,color_map[c1],color_map[c2])
-            else:
-                contest = "{0} v.s. {1}".format(c1,c2)
+            contest = "{0}:{1}".format(c1,c2)
             round_scores[contest] = {c1:0, c2:0}
             for vote in votes:
                 c1i = vote.ranking(c1)
@@ -86,38 +67,13 @@ class CondorcetMethod(OrdinalSystem):
                 else:
                     msg = "{0} does not display complete ordering"
                     raise VotingError(msg.format(vote))
-            if verbose:
-                msg= ""
-                if colors:
-                    if round_scores[contest][c1] > round_scores[contest][c2]:
-                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
-                        msg += "has <strong>{2}</strong> votes, "
-                        msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
-                    elif round_scores[contest][c1] < round_scores[contest][c2]:
-                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
-                        msg += "has {2} votes, "
-                        msg += "and <span style='color: {6}'>{3}</span> has <strong>{4}</strong> votes"
-                    else:
-                        msg += "In contest, {0}: <span style='color: {5}'>{1}</span> "
-                        msg += "has {2} votes, "
-                        msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
-                    msgs.append(msg.format(contest, c1, 
-                                round_scores[contest][c1],
-                                c2, round_scores[contest][c2],color_map[c1],
-                                color_map[c2]))
-                else:
-                    msg += "In contest, {0}: {1} has {2} votes, "
-                    msg += "and {3} has {4} votes"
-                    msgs.append(msg.format(contest, c1, 
-                                round_scores[contest][c1],
-                                c2, round_scores[contest][c2]))
             if round_scores[contest][c1] < round_scores[contest][c2]:
                 ordering.append(Result(winner=c2, loser=c1))
             elif round_scores[contest][c2] < round_scores[contest][c1]:
                 ordering.append(Result(winner=c1, loser=c2))
             else:
                 ordering.append(Result(tied=[c1,c2]))
-        return ordering, msgs  
+        return ordering, round_scores  
 
     def _make_order_matrix(self, orders):
         for order in orders:

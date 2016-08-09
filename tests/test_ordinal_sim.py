@@ -20,14 +20,14 @@ class TestOrdinal:
             ordsys = OrdinalSystem()
 
     def test_condercet_paradox(self):
-        with pytest.raises(CondorcetParadox):
-            cm = CondorcetMethod(['a', 'b', 'c'])
-            votes = [
-                OrdinalVote(['a','b','c']),
-                OrdinalVote(['b','c','a']),
-                OrdinalVote(['c','a','b'])
-            ]
-            cm.decide(votes)
+        cm = CondorcetMethod(['a', 'b', 'c'])
+        votes = [
+            OrdinalVote(['a','b','c']),
+            OrdinalVote(['b','c','a']),
+            OrdinalVote(['c','a','b'])
+        ]
+        decision = cm.decide(votes)
+        assert(decision['results'].startswith("Detected cycle"))
     
     def test_respond_correctly_to_one_choice(self):
         with pytest.raises(VotingError):

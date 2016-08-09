@@ -45,12 +45,42 @@ class RandomCondorcetView(MethodView):
         if self.form.validate():
             rc = RandomCondorcetDemo()
             output = rc.run(self.form.number_of_voters.data)
+            output['contests'] = RandomCondorcetView.format_round_scores(
+                output['round_scores']
+            )
+            del output['round_scores']
             return render_template('random_condorcet.html', form=None, 
                                    output=output)
         else:
             return render_template('random_condorcet.html', form=self.form,
                                    output=None)
 
+    @staticmethod
+    def format_round_scores(round_scores, colors={'a':"red", 'b':"blue", 
+                                                  'c':"green",'d':"yellow"}):
+        output = []
+        for contest_key, contest_result in round_scores.items():
+            c1,c2 = contest_key.split(':')
+            contest = "<span style='color: {2}'>{0}</span> v.s. "
+            contest += "<span style='color: {3}'>{1}</span>"
+            contest = contest.format(c1,c2,colors[c1],colors[c2])
+        
+            msg = "In contest, {0}: <span style='color: {5}'>{1}</span> "
+            if contest_result[c1] > contest_result[c2]:
+                msg += "has <strong>{2}</strong> votes, "
+                msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
+            elif contest_result[c1] < contest_result[c2]:
+                msg += "has {2} votes, and <span style='color: {6}'>{3}</span> "
+                msg += "has <strong>{4}</strong> votes"
+            else:
+                msg += "has {2} votes, "
+                msg += "and <span style='color: {6}'>{3}</span> has {4} votes"
+            output.append(msg.format(contest, c1, 
+                                                 contest_result[c1], c2, 
+                                                 contest_result[c2],colors[c1], 
+                                                 colors[c2]))
+        return output
+        
 
 blueprint.add_url_rule("/", view_func=ScenarioMainView.as_view("main"))
 
