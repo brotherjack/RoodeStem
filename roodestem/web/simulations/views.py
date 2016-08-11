@@ -37,8 +37,9 @@ class RandomCondorcetView(MethodView):
     def __init__(self):
         class RandomCondorcetInitialForm():
             number_of_voters = 10
-            seed_field = 10
-            candidates = ['a', 'b', 'c', 'd']
+            seed_field = 100
+            candidates = ['Donald Trump', 'Hillary Clinton', 
+                          'Jill Stein', 'Gary Johnson']
             colors = ['red', 'blue', 'green', 'yellow']
             submit_run = False
         self.form = RandomCondorcetForm(obj=RandomCondorcetInitialForm)
