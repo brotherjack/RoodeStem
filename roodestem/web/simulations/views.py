@@ -53,11 +53,13 @@ class RandomCondorcetView(MethodView):
     
     def post(self):
         if self.form.validate():
-            rc = RandomCondorcetDemo()
+            rc = RandomCondorcetDemo(self.form.candidates.data)
             output = rc.run(self.form.number_of_voters.data,
                             self.form.seed_field.data)
+            cand_colors = zip(self.form.candidates.data, self.form.colors.data)
             output['contests'] = RandomCondorcetView.format_round_scores(
-                output['round_scores']
+                output['round_scores'],
+                {k:v for k,v in cand_colors}
             )
             del output['round_scores']
             return render_template('random_condorcet.html', form=None, 
@@ -67,8 +69,7 @@ class RandomCondorcetView(MethodView):
                                    output=None)
 
     @staticmethod
-    def format_round_scores(round_scores, colors={'a':"red", 'b':"blue", 
-                                                  'c':"green",'d':"yellow"}):
+    def format_round_scores(round_scores, colors):
         output = []
         for contest_key, contest_result in round_scores.items():
             c1,c2 = contest_key.split(':')
