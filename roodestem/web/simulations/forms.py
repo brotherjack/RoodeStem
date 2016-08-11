@@ -24,7 +24,25 @@ class RandomCondorcetForm(Form):
         validators=[NumberRange(-1*sys.maxsize, sys.maxsize)]
     )
     submit_run = SubmitField("Run")
+
+
+class BordaScoringForm(Form):
+    irrelevant_candidates = FieldList(StringField('Irrelevant Candidate'), 
+                                      'Irrelevant Candidates', min_entries=2, 
+                                      max_entries=2)
+    irrelevant_color = StringField('Color for Irrelevant Candidate')
     
-#     def __init__(self, choices=['a', 'b', 'c', 'd']):
-#         super()
-#         
+    preferred_candidate_a = StringField('Preferred Candidate A')
+    preferred_candidate_b = StringField('Preferred Candidate B')
+    
+    strategic_count_for_a = IntegerField("Number of voters for A")
+    strategic_count_for_b = IntegerField("Number of voters for B")
+    
+    preferred_candidate_a_color = StringField('Color for preferred Candidate A')
+    preferred_candidate_b_color = StringField('Color for preferred Candidate B')
+    
+    seed_field = IntegerField(
+        "Seed", 
+        validators=[NumberRange(-1*sys.maxsize, sys.maxsize)]
+    )
+    submit_run = SubmitField("Run")
