@@ -43,10 +43,11 @@
 				</div>
 
 		</div>
-
-		<script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-{% endblock %}
+    {% endblock %}
+    {% block js_scripts %}
+      <script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    {% endblock %}
 </body>
 </html>
