@@ -38,15 +38,18 @@ class RandomCondorcetView(MethodView):
         class RandomCondorcetInitialForm():
             number_of_voters = 10
             seed_field = 10
-            candidates = ['JOhnny', 'Jimmy', 'Yomammy']
+            candidates = ['a', 'b', 'c', 'd']
+            colors = ['red', 'blue', 'green', 'yellow']
             submit_run = False
         self.form = RandomCondorcetForm(obj=RandomCondorcetInitialForm)
         self.form.populate_obj(RandomCondorcetInitialForm())
-        pass
     
     def get(self):
-        return render_template('random_condorcet.html', form=self.form,
-                                   output=None)
+        return render_template(
+            'random_condorcet.html', 
+            form=self.form,
+            output=None, 
+            cand_colors=zip(self.form.candidates, self.form.colors))
     
     def post(self):
         if self.form.validate():

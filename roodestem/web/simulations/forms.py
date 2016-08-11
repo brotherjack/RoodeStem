@@ -13,6 +13,8 @@ from wtforms.validators import NumberRange, InputRequired
 class RandomCondorcetForm(Form):
     candidates = FieldList(StringField('Candidate'), 'Candidates',
                            min_entries=2, max_entries=100)
+    colors = FieldList(StringField('Color'), 'Colors',
+                       min_entries=2, max_entries=100)
     number_of_voters = IntegerField(
         'Number of Voters', 
         validators=[InputRequired(),NumberRange(2,10)]
