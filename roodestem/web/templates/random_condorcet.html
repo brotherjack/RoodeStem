@@ -11,8 +11,14 @@
           <div class="panel panel-default">
             <!-- <div class="panel-body"> --> <table class="table" id="candidate_table">
               {% for candidate in form.candidates %}
-                <tr>    
-                  <td>{{ candidate.label }}:</td><td>{{ candidate(class_="form-control") }}</td><td></td>
+                <tr> 
+                  {% if loop.index0 < 2 %}
+                    <td>{{ candidate.label }}:</td><td>{{ candidate(class_="form-control") }}</td><td></td>
+                  {% else %}
+                    <td>{{ candidate.label }}:</td>
+                    <td>{{ candidate(class_="form-control") }}</td>
+                    <td><button type="button" class="btn btn-default btn-sm remove_candidate"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                  {% endif %}
                 </tr>
               {% endfor %}
             <!--</div> --></table>

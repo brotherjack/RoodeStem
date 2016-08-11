@@ -25,5 +25,4 @@ class RandomCondorcetForm(Form):
     
 #     def __init__(self, choices=['a', 'b', 'c', 'd']):
 #         super()
-#         for choice in choices:
-#             self.candidates.append_entry(StringField("Candidate", choice))
+#         

@@ -35,7 +35,14 @@ class BordaScoringView(MethodView):
 
 class RandomCondorcetView(MethodView):
     def __init__(self):
-        self.form = RandomCondorcetForm()
+        class RandomCondorcetInitialForm():
+            number_of_voters = 10
+            seed_field = 10
+            candidates = ['JOhnny', 'Jimmy', 'Yomammy']
+            submit_run = False
+        self.form = RandomCondorcetForm(obj=RandomCondorcetInitialForm)
+        self.form.populate_obj(RandomCondorcetInitialForm())
+        pass
     
     def get(self):
         return render_template('random_condorcet.html', form=self.form,
