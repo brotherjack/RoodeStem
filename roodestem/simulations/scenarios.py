@@ -16,8 +16,3 @@ class Scenario(object, metaclass=ABCMeta):
     @abstractmethod
     def description(self):
         pass
-    
-    @property
-    @abstractmethod
-    def choices(self):
-        pass

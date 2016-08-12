@@ -27,9 +27,8 @@ class RandomCondorcetForm(Form):
 
 
 class BordaScoringForm(Form):
-    irrelevant_candidates = FieldList(StringField('Irrelevant Candidate'), 
-                                      'Irrelevant Candidates', min_entries=2, 
-                                      max_entries=2)
+    irrelevant_candidate_a = StringField('Irrelevant Candidate A')
+    irrelevant_candidate_b = StringField('Irrelevant Candidate B') 
     irrelevant_color = StringField('Color for Irrelevant Candidate')
     
     preferred_candidate_a = StringField('Preferred Candidate A')
@@ -38,8 +37,8 @@ class BordaScoringForm(Form):
     strategic_count_for_a = IntegerField("Number of voters for A")
     strategic_count_for_b = IntegerField("Number of voters for B")
     
-    preferred_candidate_a_color = StringField('Color for preferred Candidate A')
-    preferred_candidate_b_color = StringField('Color for preferred Candidate B')
+    preferred_color_a = StringField('Color for preferred Candidate A')
+    preferred_color_b = StringField('Color for preferred Candidate B')
     
     seed_field = IntegerField(
         "Seed", 

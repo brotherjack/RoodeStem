@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, jsonify
 
 from simulations.borda_scoring_demo import BordaScoringDemo
 from simulations.random_condorcet_demo import RandomCondorcetDemo
-from web.simulations.forms import RandomCondorcetForm
+from web.simulations.forms import RandomCondorcetForm, BordaScoringForm
 
 
 blueprint = Blueprint("scenarios", __name__, url_prefix='/scenarios',
@@ -27,12 +27,35 @@ class ScenarioMainView(MethodView):
 
 
 class BordaScoringView(MethodView):
+    def __init__(self):
+        class BordaScoringInitialForm():
+            irrelevant_candidate_a = "Jill Stein"
+            irrelevant_candidate_b = "Gary Johnson"
+            irrelevant_color = "gray"
+            preferred_candidate_a = "Hillary Clinton"
+            preferred_candidate_b = "Donald Trump"
+            strategic_count_for_a = 10
+            strategic_count_for_b = 10
+            preferred_color_a = "blue"
+            preferred_color_b = "red"
+            seed_field = 10
+            submit_run = False  
+        self.form = BordaScoringForm(obj=BordaScoringInitialForm)
+        self.form.populate_obj(BordaScoringInitialForm())
+    
     def get(self):
-        bsd = BordaScoringDemo()
-        output = bsd.run()
-        return jsonify(output)
+        return render_template('borda_scoring.html', form=self.form)
 
-
+    def post(self):
+        if self.form.validate():
+            bsd = BordaScoringDemo(
+                [self.form.preferred_candidate_a.data,
+                 self.form.preferred_candidate_b.data],
+                [self.form.irrelevant_candidate_a.data,
+                 self.form.irrelevant_candidate_b.data],                   
+                [],
+            )
+    
 class RandomCondorcetView(MethodView):
     def __init__(self):
         class RandomCondorcetInitialForm():

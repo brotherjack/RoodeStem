@@ -9,11 +9,17 @@ import sys
 from voting_systems.borda import BordaCount
 from voting_systems.voting_system import OrdinalVote
 from simulations.scenarios import Scenario
+from Crypto import SelfTest
 
 
 class BordaScoringDemo(Scenario):
-    def __init__(self, choices=['a','b','c', 'd']):
-        self._choices = choices
+    def __init__(self, preferred_candidates, irrelevant_candidates,
+                 preferred_colors, irrelevant_colors):
+        self.preferred_candidates = preferred_candidates
+        self.irrelevant_candidates = irrelevant_candidates
+        self.preferred_colors = preferred_colors
+        self.irrelevant_colors = irrelevant_colors
+        self.choices = self.preferred_candidates + self.irrelevant_candidates 
 
     def run(self, rn=10, randomSeed=True):
         output = {
@@ -39,17 +45,23 @@ class BordaScoringDemo(Scenario):
                 seed = random.randint(0, sys.maxsize)
             curr_round['seed'] = seed
             randselects = [random.randint(0,1) for _ in range(0, 100)]
+            irr_can1, irr_can2 = self.irrelevant_candidates
+            pref_can1, pref_can2 = self.preferred_candidates
             for i in range(0, 50): 
                 if randselects[i] == 0:
-                    votes.append(OrdinalVote(['a', 'b', 'c', 'd']))
+                    votes.append(OrdinalVote([pref_can1, irr_can1, 
+                                              irr_can2, pref_can2]))
                 else:
-                    votes.append(OrdinalVote(['a', 'c', 'b', 'd']))
+                    votes.append(OrdinalVote([pref_can1, irr_can2, 
+                                              irr_can1, pref_can2]))
             
             for i in range(50, 100):
                 if randselects[i] == 0:
-                    votes.append(OrdinalVote(['d', 'b', 'c', 'a']))
+                    votes.append(OrdinalVote([pref_can2, irr_can1, 
+                                              irr_can2, pref_can1]))
                 else:
-                    votes.append(OrdinalVote(['d', 'c', 'b', 'a']))
+                    votes.append(OrdinalVote([pref_can2, irr_can2, 
+                                              irr_can1, pref_can1]))
     
             bc = BordaCount(self.choices,
                             score_fn=BordaCount.fractional_score_function)
@@ -69,12 +81,14 @@ class BordaScoringDemo(Scenario):
             
             try:
                 if results.tied:
-                    assert('a' in results.tied and 'd' in results.tied)
+                    assert(pref_can1 in results.tied and\
+                           pref_can2 in results.tied)
                 else:
-                    assert('a' in results.winner or 'd' in results.winner)
-                assert('b' in results.loser and 'c' in results.loser)
+                    assert(pref_can1 in results.winner or\
+                           pref_can2 in results.winner)
+                assert(irr_can1 in results.loser and irr_can2 in results.loser)
             except AssertionError as ae:
-                print(ae.message)
+                curr_round.update({"assertion_fail": ae.message})
                 curr_round['assertionPass'] = False
             else:
                 assertionPass += 1
@@ -86,14 +100,6 @@ class BordaScoringDemo(Scenario):
     @property
     def description(self):
         return cls.description()
-    
-    @property
-    def choices(self):
-        return self._choices
-    
-    @choices.setter
-    def choices(self, choices):
-        self._choices = choices
     
     def __repr__(self):
         return "<BordaScoringDemo: choices={0}>".format(self.choices)

@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <section name="formSection">
+    {% if form %}
+      <form id="bordaScoringSettings" class="form form-register" method="POST" action="" role="form">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          <div class="pannel-heading">
+            <h3 class="panel-title">Candidates</h3>
+          </div>
+          <div class="panel panel-default">
+            <table class="table" id="candidate_table">
+              <tr>
+                <td>{{ form.irrelevant_candidate_a.label }}</td>
+                <td>{{ form.irrelevant_candidate_a(class_="form-control") }}</td>
+                <td>{{ form.irrelevant_color.label }}</td>
+                <td>{{ form.irrelevant_color(class_="form-control") }}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.irrelevant_candidate_b.label }}</td>
+                <td>{{ form.irrelevant_candidate_b(class_="form-control") }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.preferred_candidate_a.label }}</td>
+                <td>{{ form.preferred_candidate_a(class_="form-control") }}</td>
+                <td>{{ form.preferred_color_a.label }}</td>
+                <td>{{ form.preferred_color_a(class_="form-control") }}</td>
+                <td>{{ form.strategic_count_for_a.label }}</td>
+                <td>{{ form.strategic_count_for_a(class_="form-control") }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.preferred_candidate_b.label }}</td>
+                <td>{{ form.preferred_candidate_b(class_="form-control") }}</td>
+                <td>{{ form.preferred_color_b.label }}</td>
+                <td>{{ form.preferred_color_b(class_="form-control") }}</td>
+                <td>{{ form.strategic_count_for_b.label }}</td>
+                <td>{{ form.strategic_count_for_b(class_="form-control") }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="form-group">
+          {{ form.seed_field.label }}
+          {{ form.seed_field(class_="form-control") }}
+        </div>
+         <div class="form-group">
+          {{ form.submit_run(class_="btn btn-primary form-control") }}
+        </div>
+      </form>
+    {% elif output %}
+    {% endif %}
+  </section>
+{% endblock %}
+    
+{% block js_scripts %}
+    {{ super() }}
+{% endblock %}
