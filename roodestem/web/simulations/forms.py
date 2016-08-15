@@ -3,11 +3,14 @@ Created on Aug 8, 2016
 
 @author: Thomas Adriaan Hellinger
 '''
-import sys
-
 from flask_wtf import Form
 from wtforms.fields import IntegerField, SubmitField, FieldList, StringField
-from wtforms.validators import NumberRange, InputRequired
+from wtforms.validators import(
+    NumberRange, 
+    InputRequired, 
+    ValidationError,
+    DataRequired
+)
 
 
 class RandomCondorcetForm(Form):
@@ -19,14 +22,20 @@ class RandomCondorcetForm(Form):
         'Number of Voters', 
         validators=[InputRequired(),NumberRange(2,10)]
     )
-    seed_field = IntegerField(
-        "Seed", 
-        validators=[NumberRange(-1*sys.maxsize, sys.maxsize)]
-    )
+    seed_field = IntegerField("Seed", validators=[DataRequired()])
     submit_run = SubmitField("Run")
 
 
 class BordaScoringForm(Form):
+    def validate(self):
+        if super().validate():
+            if self.start_seed_field.data > self.end_seed_field.data:
+                self.errors.update({self.start_seed_field.label.field_id:
+                                    "Start seed must be less than end seed."})
+                return False
+            else:
+                return True
+    
     irrelevant_candidate_a = StringField('Irrelevant Candidate A')
     irrelevant_candidate_b = StringField('Irrelevant Candidate B') 
     irrelevant_color = StringField('Color for Irrelevant Candidate')
@@ -40,8 +49,7 @@ class BordaScoringForm(Form):
     preferred_color_a = StringField('Color for preferred Candidate A')
     preferred_color_b = StringField('Color for preferred Candidate B')
     
-    seed_field = IntegerField(
-        "Seed", 
-        validators=[NumberRange(-1*sys.maxsize, sys.maxsize)]
-    )
+    start_seed_field = IntegerField("Starting Seed",
+                                    validators=[DataRequired()])
+    end_seed_field = IntegerField("Ending Seed", validators=[DataRequired()])
     submit_run = SubmitField("Run")

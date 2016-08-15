@@ -53,8 +53,11 @@ class BordaScoringView(MethodView):
                  self.form.preferred_candidate_b.data],
                 [self.form.irrelevant_candidate_a.data,
                  self.form.irrelevant_candidate_b.data],                   
-                [],
+                [self.form.preferred_color_a.data,
+                 self.form.preferred_color_b.data],
+                self.irrelevant_color
             )
+            
     
 class RandomCondorcetView(MethodView):
     def __init__(self):

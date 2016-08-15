@@ -9,16 +9,15 @@ import sys
 from voting_systems.borda import BordaCount
 from voting_systems.voting_system import OrdinalVote
 from simulations.scenarios import Scenario
-from Crypto import SelfTest
 
 
 class BordaScoringDemo(Scenario):
     def __init__(self, preferred_candidates, irrelevant_candidates,
-                 preferred_colors, irrelevant_colors):
+                 preferred_colors, irrelevant_color):
         self.preferred_candidates = preferred_candidates
         self.irrelevant_candidates = irrelevant_candidates
         self.preferred_colors = preferred_colors
-        self.irrelevant_colors = irrelevant_colors
+        self.irrelevant_color = irrelevant_color
         self.choices = self.preferred_candidates + self.irrelevant_candidates 
 
     def run(self, rn=10, randomSeed=True):
@@ -65,7 +64,7 @@ class BordaScoringDemo(Scenario):
     
             bc = BordaCount(self.choices,
                             score_fn=BordaCount.fractional_score_function)
-            #print("bc is {0}".format(bc))
+            
             curr_round['votes'] = [v.choices for v in votes]
             results = bc.decide(votes)
             msg = "Results with fractional scoring fn: {0}\nScores: {1}"
