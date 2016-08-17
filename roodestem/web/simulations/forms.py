@@ -9,7 +9,7 @@ from wtforms.validators import(
     NumberRange, 
     InputRequired, 
     ValidationError,
-    DataRequired
+    InputRequired
 )
 
 
@@ -22,7 +22,7 @@ class RandomCondorcetForm(Form):
         'Number of Voters', 
         validators=[InputRequired(),NumberRange(2,10)]
     )
-    seed_field = IntegerField("Seed", validators=[DataRequired()])
+    seed_field = IntegerField("Seed", validators=[InputRequired()])
     submit_run = SubmitField("Run")
 
 
@@ -50,6 +50,6 @@ class BordaScoringForm(Form):
     preferred_color_b = StringField('Color for preferred Candidate B')
     
     start_seed_field = IntegerField("Starting Seed",
-                                    validators=[DataRequired()])
-    end_seed_field = IntegerField("Ending Seed", validators=[DataRequired()])
+                                    validators=[InputRequired()])
+    end_seed_field = IntegerField("Ending Seed", validators=[InputRequired()])
     submit_run = SubmitField("Run")

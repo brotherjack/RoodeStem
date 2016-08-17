@@ -34,11 +34,12 @@ class BordaScoringView(MethodView):
             irrelevant_color = "gray"
             preferred_candidate_a = "Hillary Clinton"
             preferred_candidate_b = "Donald Trump"
-            strategic_count_for_a = 10
-            strategic_count_for_b = 10
+            strategic_count_for_a = 50
+            strategic_count_for_b = 50
             preferred_color_a = "blue"
             preferred_color_b = "red"
-            seed_field = 10
+            start_seed_field = 0
+            end_seed_field = 10
             submit_run = False  
         self.form = BordaScoringForm(obj=BordaScoringInitialForm)
         self.form.populate_obj(BordaScoringInitialForm())
@@ -47,7 +48,7 @@ class BordaScoringView(MethodView):
         return render_template('borda_scoring.html', form=self.form)
 
     def post(self):
-        if self.form.validate():
+        if self.form.validate_on_submit():
             bsd = BordaScoringDemo(
                 [self.form.preferred_candidate_a.data,
                  self.form.preferred_candidate_b.data],
@@ -55,8 +56,18 @@ class BordaScoringView(MethodView):
                  self.form.irrelevant_candidate_b.data],                   
                 [self.form.preferred_color_a.data,
                  self.form.preferred_color_b.data],
-                self.irrelevant_color
+                self.form.irrelevant_color.data
             )
+            output = bsd.run(self.form.start_seed_field.data,
+                             self.form.end_seed_field.data,
+                             self.form.strategic_count_for_a.data,
+                             self.form.strategic_count_for_b.data)
+            return render_template("borda_scoring.html",
+                                   formdata=self.form.data,
+                                   output=output)
+        else:
+            return render_template("borda_scoring.html", form=self.form,
+                                   output=None)
             
     
 class RandomCondorcetView(MethodView):

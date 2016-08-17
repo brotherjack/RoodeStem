@@ -66,10 +66,22 @@
         </div>
       </form>
     {% elif output %}
+      <div class="container">
+        <p>Preferred candidates are: <span style="color: {{formdata.preferred_color_a}}">{{ formdata.preferred_candidate_a }}</span> and <span style="color: {{formdata.preferred_color_b}}">{{ formdata.preferred_candidate_b }}</span>.</p>
+        
+        <p>Irrelevant candidates are: <span style="color: {{formdata.irrelevant_color}}">{{ formdata.irrelevant_candidate_a }}</span> and <span style="color: {{formdata.irrelevant_color}}">{{ formdata.irrelevant_candidate_b }}</span>.</p>
+        
+        <p><span style="color: {{formdata.preferred_color_a}}">{{ formdata.preferred_candidate_a }}</span> has {{formdata.strategic_count_for_a}} voters committing strategic votes for them and against <span style="color: {{formdata.preferred_color_b}}">{{ formdata.preferred_candidate_b }}</span>.</p>
+        
+        <p><span style="color: {{formdata.preferred_color_b}}">{{ formdata.preferred_candidate_b }}</span> has {{formdata.strategic_count_for_b}} voters committing strategic votes for them and against <span style="color: {{formdata.preferred_color_a}}">{{ formdata.preferred_candidate_a }}</span>.</p>
+        
+        <p>Seed range for pseudo-random number generator was: {{ formdata.start_seed_field }} to {{ formdata.end_seed_field }}</p>
+        
+        <p>Assestion that fractional scoring algorithm defeated strategic voting in Borda Count (where the standard N-1 algorithm yielded to strategic voting) held in {{ output.assertionPass}} / {{ formdata.start_seed_field|abs + formdata.end_seed_field|abs}} cases.</p>
+      </div>
     {% endif %}
   </section>
 {% endblock %}
-    
 {% block js_scripts %}
     {{ super() }}
 {% endblock %}

@@ -20,33 +20,31 @@ class BordaScoringDemo(Scenario):
         self.irrelevant_color = irrelevant_color
         self.choices = self.preferred_candidates + self.irrelevant_candidates 
 
-    def run(self, rn=10, randomSeed=True):
+    def run(self, min_seed, max_seed, strat_a, strat_b):
         output = {
             "choices": self.choices,
             "assertionPass": 0,
             "rounds":[], 
         }
         assertionPass = 0
-        for r in range(0, rn):
+        for r in range(min_seed, max_seed):
             curr_round = {
                 "round_name": "round_{0}".format(r),
                 "seed": "",
                 "assertionPass": True,
-                "votes": [],
                 "fractional_scoring_results": "",
                 "standard_scoring_results": ""
             }
-            #print("Choices are: {0}".format(self.choices))
             votes = []
             seed = r
-            # TODO: Make sure that random seed is not reselected...ever 
-            if randomSeed:
-                seed = random.randint(0, sys.maxsize)
             curr_round['seed'] = seed
-            randselects = [random.randint(0,1) for _ in range(0, 100)]
+            random.seed(seed)
+            randselects = [
+                random.randint(0,1) for _ in range(0, strat_a+strat_b)
+            ]
             irr_can1, irr_can2 = self.irrelevant_candidates
             pref_can1, pref_can2 = self.preferred_candidates
-            for i in range(0, 50): 
+            for i in range(0, strat_a): 
                 if randselects[i] == 0:
                     votes.append(OrdinalVote([pref_can1, irr_can1, 
                                               irr_can2, pref_can2]))
@@ -54,7 +52,7 @@ class BordaScoringDemo(Scenario):
                     votes.append(OrdinalVote([pref_can1, irr_can2, 
                                               irr_can1, pref_can2]))
             
-            for i in range(50, 100):
+            for i in range(strat_a, strat_a+strat_b):
                 if randselects[i] == 0:
                     votes.append(OrdinalVote([pref_can2, irr_can1, 
                                               irr_can2, pref_can1]))
@@ -65,17 +63,13 @@ class BordaScoringDemo(Scenario):
             bc = BordaCount(self.choices,
                             score_fn=BordaCount.fractional_score_function)
             
-            curr_round['votes'] = [v.choices for v in votes]
             results = bc.decide(votes)
             msg = "Results with fractional scoring fn: {0}\nScores: {1}"
             curr_round['fractional_scoring_results'] = msg.format(results, bc.scores)
-            #print(msg.format(results, bc.scores))
 
             bc = BordaCount(self.choices)
-            #print("bc is {0}".format(bc))
             results2 = bc.decide(votes)
             msg = "Results with standard scoring fn: {0}\nScores: {1}"
-            #print(msg.format(results2, bc.scores))
             curr_round['standard_scoring_results'] = msg.format(results2, bc.scores)
             
             try:
@@ -94,7 +88,6 @@ class BordaScoringDemo(Scenario):
             output['rounds'].append(curr_round)
         output['assertionPass'] = assertionPass
         return output
-        #print("Assertion passed on {0} runs...".format(assertionPass))
             
     @property
     def description(self):
