@@ -40,7 +40,7 @@ class BordaScoringDemo(Scenario):
             curr_round['seed'] = seed
             random.seed(seed)
             randselects = [
-                random.randint(0,1) for _ in range(0, strat_a+strat_b)
+                random.randint(0,1)  for _ in range(0, strat_a+strat_b)
             ]
             irr_can1, irr_can2 = self.irrelevant_candidates
             pref_can1, pref_can2 = self.preferred_candidates

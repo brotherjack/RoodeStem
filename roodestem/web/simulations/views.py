@@ -5,9 +5,9 @@ Created on Aug 8, 2016
 '''
 from flask import Blueprint, render_template, jsonify
 
-from simulations.borda_scoring_demo import BordaScoringDemo
-from simulations.random_condorcet_demo import RandomCondorcetDemo
-from web.simulations.forms import RandomCondorcetForm, BordaScoringForm
+from roodestem.simulations.borda_scoring_demo import BordaScoringDemo
+from roodestem.simulations.random_condorcet_demo import RandomCondorcetDemo
+from roodestem.web.simulations.forms import RandomCondorcetForm, BordaScoringForm
 
 
 blueprint = Blueprint("scenarios", __name__, url_prefix='/scenarios',
