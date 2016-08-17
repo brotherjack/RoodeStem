@@ -6,14 +6,11 @@ Created on Aug 3, 2016
 import os
 
 from flask import Flask, render_template, jsonify, url_for
-from IPython import embed
 
-try:
-    from roodestem.simulations.borda_scoring_demo import BordaScoringDemo
-    from roodestem.simulations.random_condorcet_demo import RandomCondorcetDemo
-    from roodestem.web.simulations.views import blueprint
-except ImportError as ie:
-    embed()
+from roodestem.simulations.borda_scoring_demo import BordaScoringDemo
+from roodestem.simulations.random_condorcet_demo import RandomCondorcetDemo
+from roodestem.web.simulations.views import blueprint
+
 
 app = Flask(__name__, template_folder="web/templates/",
             static_folder="web/static/", static_url_path="/web/static")
