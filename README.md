@@ -16,7 +16,7 @@ Runs as a standard python program on the command-line. I won't explain how to in
 Dependencies can be installed via pip, specifically running `pip install -r requirements.txt`. If you want to install the development tools being used then run `pip install -r requirements/dev.txt`, in addition to the previous command.
 
 Just run `python setup.py install`, as is customary. Then just type `roodestem` in the terminal to launch
-the flask server running roodestem. Use <CTRL+C> to kill the Flask server.
+the flask server running roodestem. Use \<CTRL+C> to kill the Flask server.
 
 
 ### Revision History: 
